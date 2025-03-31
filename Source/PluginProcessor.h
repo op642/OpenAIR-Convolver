@@ -13,12 +13,12 @@
 //==============================================================================
 /**
 */
-class OpenAIR_ConvolverAudioProcessor  : public juce::AudioProcessor
+class OpenAIRConvolverAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    OpenAIR_ConvolverAudioProcessor();
-    ~OpenAIR_ConvolverAudioProcessor() override;
+    OpenAIRConvolverAudioProcessor();
+    ~OpenAIRConvolverAudioProcessor() override;
 
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
@@ -67,5 +67,5 @@ private:
     
     MonoChain leftChain, rightChain;
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIR_ConvolverAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessor)
 };

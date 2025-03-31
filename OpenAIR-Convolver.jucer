@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="ySQRht" name="OpenAIR_Convolver" projectType="audioplug"
-              useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
-  <MAINGROUP id="LcdVuq" name="OpenAIR_Convolver">
+<JUCERPROJECT id="ySQRht" name="OpenAIR-Convolver" projectType="audioplug"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1"
+              pluginDesc="Convolution Reverb" pluginName="OpenAIR Convolver"
+              companyName="York AudioLab">
+  <MAINGROUP id="LcdVuq" name="OpenAIR-Convolver">
     <GROUP id="{2A49D1C9-F5B8-3C89-B997-27A3ED5AF4A8}" name="Source">
       <FILE id="pc74Rt" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>

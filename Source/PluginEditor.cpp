@@ -10,7 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-OpenAIR_ConvolverAudioProcessorEditor::OpenAIR_ConvolverAudioProcessorEditor (OpenAIR_ConvolverAudioProcessor& p)
+OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (OpenAIRConvolverAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     // Make sure that before the constructor has finished, you've set the
@@ -18,12 +18,12 @@ OpenAIR_ConvolverAudioProcessorEditor::OpenAIR_ConvolverAudioProcessorEditor (Op
     setSize (800, 600);
 }
 
-OpenAIR_ConvolverAudioProcessorEditor::~OpenAIR_ConvolverAudioProcessorEditor()
+OpenAIRConvolverAudioProcessorEditor::~OpenAIRConvolverAudioProcessorEditor()
 {
 }
 
 //==============================================================================
-void OpenAIR_ConvolverAudioProcessorEditor::paint (juce::Graphics& g)
+void OpenAIRConvolverAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
 //    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
@@ -34,7 +34,7 @@ void OpenAIR_ConvolverAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
-void OpenAIR_ConvolverAudioProcessorEditor::resized()
+void OpenAIRConvolverAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
