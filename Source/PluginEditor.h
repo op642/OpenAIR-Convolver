@@ -25,9 +25,15 @@ public:
     void resized() override;
 
 private:
+    // void comboBoxChanged(juce::ComboBox* irSelectionBox) override;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     OpenAIRConvolverAudioProcessor& audioProcessor;
+    
+    juce::TextButton loadIRButton;
+    
+    std::unique_ptr<juce::FileChooser> fileChooser;
+//    juce::ComboBox irSelectionBox;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessorEditor)
 };

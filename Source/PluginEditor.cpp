@@ -10,13 +10,7 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (OpenAIRConvolverAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
-{
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (800, 600);
-}
+
 
 OpenAIRConvolverAudioProcessorEditor::~OpenAIRConvolverAudioProcessorEditor()
 {
@@ -25,17 +19,53 @@ OpenAIRConvolverAudioProcessorEditor::~OpenAIRConvolverAudioProcessorEditor()
 //==============================================================================
 void OpenAIRConvolverAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-//    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-    g.fillAll(juce::Colours::turquoise);
+    g.fillAll(juce::Colours::black);
 
-    g.setColour (juce::Colours::lime);
-    g.setFont (juce::FontOptions (50.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.setColour (juce::Colours::white);
+    g.setFont (juce::FontOptions (30.0f));
+    g.drawFittedText ("OpenAIR Convolver", getLocalBounds(), juce::Justification::centred, 1);
+}
+
+OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (OpenAIRConvolverAudioProcessor& p)
+    : AudioProcessorEditor (&p), audioProcessor (p)
+{
+    // Make sure that before the constructor has finished, you've set the
+    // editor's size to whatever you need it to be.
+    addAndMakeVisible(loadIRButton);
+    loadIRButton.setButtonText("Load IR");
+    loadIRButton.onClick = [this] {
+        fileChooser = std::make_unique<juce::FileChooser>("Select an IR file", audioProcessor.root, "*");
+        
+        const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles | juce::FileBrowserComponent::canSelectDirectories;
+        
+        fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+        {
+            juce::File file = chooser.getResult();
+            
+            if (file.getFileExtension() == ".wav" | file.getFileExtension() == ".aif" | file.getFileExtension() == ".aiff" | file.getFileExtension() == ".mp3")
+            {
+                audioProcessor.savedIRFile = file;
+                audioProcessor.root = file.getParentDirectory().getFullPathName();
+                audioProcessor.convolution.loadImpulseResponse(file, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
+                
+                std::cout << "Loaded IR: " << file.getFullPathName() << std::endl;
+            }
+            
+        });
+        
+    };
+    setSize (400, 300);
+
 }
 
 void OpenAIRConvolverAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
+    const auto btnX = getWidth() * (0.21);
+    const auto btnY = getHeight() * (0.6);
+    const auto btnWidth = getWidth() * (0.59);
+    const auto btnHeight = getHeight() * (0.1); //JUCE_LIVE_CONSTANT
+    
+    loadIRButton.setBounds(btnX, btnY, btnWidth, btnHeight);
 }

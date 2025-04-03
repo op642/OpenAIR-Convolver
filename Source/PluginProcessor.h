@@ -51,21 +51,15 @@ public:
 
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes)
-        override;
+    void setStateInformation (const void* data, int sizeInBytes) override;
     
-    static juce::AudioProcessorValueTreeState::ParameterLayout
-        createParameterLayout();
-    juce::AudioProcessorValueTreeState aptvs {*this, nullptr,
-        "Parameters", createParameterLayout()};
+    juce::File root, savedIRFile;
+    // Add the convolution processor
+    juce::dsp::Convolution convolution;
 
 private:
-    using Filter = juce::dsp::IIR::Filter<float>;
-    
-    using CutFilter = juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter>;
-    using MonoChain = juce::dsp::ProcessorChain<CutFilter, Filter, CutFilter>;
-    
-    MonoChain leftChain, rightChain;
+    juce::dsp::ProcessSpec processSpec;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessor)
 };

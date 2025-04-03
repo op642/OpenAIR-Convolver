@@ -5,6 +5,32 @@
               pluginDesc="Convolution Reverb" pluginName="OpenAIR Convolver"
               companyName="York AudioLab">
   <MAINGROUP id="LcdVuq" name="OpenAIR-Convolver">
+    <GROUP id="{62B158F6-99BC-ECB2-B320-F6FE17F282F7}" name="Assets">
+      <GROUP id="{F690ADCA-7911-9742-9CFF-AFD9EC232F94}" name="Audio">
+        <GROUP id="{9D0024FD-77A8-119F-1E2A-F859D25E5AE1}" name="Convolved">
+          <FILE id="vYICxO" name="Usina_Speech.wav" compile="0" resource="1"
+                file="Assets/Audio/Convolved/Usina_Speech.wav"/>
+        </GROUP>
+        <GROUP id="{1D43539D-17FC-AE7F-D5B3-AB060134ED58}" name="dry_audio">
+          <FILE id="tE0cie" name="singing.wav" compile="0" resource="1" file="Assets/Audio/dry_audio/singing.wav"/>
+          <FILE id="edTdQr" name="speech.wav" compile="0" resource="1" file="Assets/Audio/dry_audio/speech.wav"/>
+          <FILE id="BujEWV" name="speech_48.wav" compile="0" resource="1" file="Assets/Audio/dry_audio/speech_48.wav"/>
+        </GROUP>
+        <GROUP id="{965B6C6A-7545-6CD5-A918-C8847509F87F}" name="IR">
+          <GROUP id="{C964250A-886A-BDED-67B7-0BB79AD0FF0A}" name="FFT_IR">
+            <FILE id="mCGRM3" name="FIR_Usina_IR.wav" compile="0" resource="1"
+                  file="Assets/Audio/IR/FFT_IR/FIR_Usina_IR.wav"/>
+          </GROUP>
+          <GROUP id="{EB841458-13BC-07A7-863E-F36519E26CE9}" name="Raw_IR">
+            <FILE id="Li2q8j" name="Usina_bformat_48.wav" compile="0" resource="1"
+                  file="Assets/Audio/IR/Raw_IR/Usina_bformat_48.wav"/>
+            <FILE id="wRCvBg" name="Usina_IR_V1.wav" compile="0" resource="1" file="Assets/Audio/IR/Raw_IR/Usina_IR_V1.wav"/>
+            <FILE id="EQb8nR" name="York_Minster_bformat_48k.wav" compile="0" resource="1"
+                  file="Assets/Audio/IR/Raw_IR/York_Minster_bformat_48k.wav"/>
+          </GROUP>
+        </GROUP>
+      </GROUP>
+    </GROUP>
     <GROUP id="{2A49D1C9-F5B8-3C89-B997-27A3ED5AF4A8}" name="Source">
       <FILE id="pc74Rt" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
