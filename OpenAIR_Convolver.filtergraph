@@ -65,7 +65,7 @@
           uiLastY_Normal="468" uiopen_Normal="0">
     <PLUGIN name="AUAudioFilePlayer" format="AudioUnit" category="Generator"
             manufacturer="Apple" version="1.6.0" file="AudioUnit:Generators/augn,afpl,appl"
-            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="195f2940a41"
+            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="195fdfab387"
             numInputs="0" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="6163676e"/>
     <STATE>634.hAGaoMGcv.C1AHv.DTfAGfPBJr.Gc3wGgvUag4VclE1XzUmbkIGUjEFcg8EDarVPUAkbkMWYzAUYxMWZyQWYtQ2TzEFcksTY4c0b0IFc4AWYWYWYxMWZu4FUzkGbk8EDOXVZrUVKxUlYkIWYtMVYyQkag0VYRDFbvwFPgxvzM3vCPDQFXYTZrUlSg0VYWIUYmk1atMmWIM2TkwVYiQWYjYTZrU1WPv3KUMWYxM2KuwVZvElbzIWZjcVYuvTZhIWXxk2KCw1a0Q1Tz8lbgcVYu7jakQjboYWYs.UYxM2atEFauTDakMFcxk1XgwFHE41Yo4VYkIWZtc1KYUVXxABMuXTZtEFaf.kbuoVYiQ2KFA0WMEFcrElXuDTcjk1auPlb48UX0QVZu8xbo41Yo41YtbWX1EpDTOAEUXwEXjgFZIUYmk1at4TXsUlVRU1Yo8laDEFcg8EDPjzbSUFakMFckQlTkcVZu4lWRU1Yo8laD8VYywzauAmVNU1cfHUYmk1at8DDvA..........XF86+d+e.....gYAA........7O......WEI...X...3toB...F....PXVP.....A....D..........................................................QF4.......PBHjfDgYFbrAA.RDVcm4Vzf.gUFkFakARLXUkazkFcrUFY.f..Y.fI.rB.IAPT.jE.dA.b.TG.5Avd.zG.DBPi.TI.jFvLATS.9DPRAPU.mEfcADX.zGP8AXe.2G.+A3u.CHfABz........f.A.........fH..................f.V.</STATE>
@@ -76,27 +76,11 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="7" x="0.2825" y="0.4826923076923077" useARA="0">
-    <PLUGIN name="OpenAIR Convolver" format="AudioUnit" category="Effect"
-            manufacturer="York AudioLab" version="1.0.0" file="AudioUnit:Effects/aufx,Ysqr,Manu"
-            uniqueId="7567797f" isInstrument="0" fileTime="0" infoUpdateTime="195f2940a41"
-            numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
-            uid="7567797f"/>
-    <STATE>191.hAGaoMGcv.y0AHv.DTfAGfPBJHwDTTAWsEla0YVXiQWcxUlbTQVXzEFWkwVYsUlaz0hag0VYWMWchQWdvU1U1Ulbyk1atQEc4AWYT4VXsUlDMEla0AjzKvPCPDULQISzN7PTvTURtAWczEsCQX0S0QGb0QmDYMWbxAA.RDVclgGVU4FcoQGakQFBWPRJ13iQKAUUVsUWeIFYp0Fc4sGf........AD..........V....................jH</STATE>
-    <LAYOUT>
-      <INPUTS>
-        <BUS index="0" layout="L R"/>
-      </INPUTS>
-      <OUTPUTS>
-        <BUS index="0" layout="L R"/>
-      </OUTPUTS>
-    </LAYOUT>
-  </FILTER>
-  <FILTER uid="8" x="0.4725" y="0.4807692307692308" useARA="0" uiLastX_Normal="499"
+  <FILTER uid="8" x="0.28875" y="0.4769230769230769" useARA="0" uiLastX_Normal="499"
           uiLastY_Normal="5" uiopen_Normal="0">
     <PLUGIN name="OpenAIR Convolver" format="VST3" category="Fx" manufacturer="York AudioLab"
             version="1.0.0" file="/Users/olipartridge/Programming/OpenAIR-Convolver/Builds/MacOSX/build/Debug/OpenAIR_Convolver.vst3"
-            uniqueId="6a7e327" isInstrument="0" fileTime="195edda99bf" infoUpdateTime="195f2940a42"
+            uniqueId="6a7e327" isInstrument="0" fileTime="195fdf83c93" infoUpdateTime="195fdfab387"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="acfe53cc"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -122,9 +106,28 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
+  <FILTER uid="10" x="0.49375" y="0.5692307692307692" useARA="0" uiLastX_Normal="94"
+          uiLastY_Normal="458" uiopen_Normal="0">
+    <PLUGIN name="OpenAIR Convolver" format="AudioUnit" category="Effect"
+            manufacturer="York AudioLab" version="1.0.0" file="AudioUnit:Effects/aufx,Ysqr,Manu"
+            uniqueId="7567797f" isInstrument="0" fileTime="0" infoUpdateTime="195fdfab387"
+            numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
+            uid="7567797f"/>
+    <STATE>191.hAGaoMGcv.y0AHv.DTfAGfPBJHwDTTAWsEla0YVXiQWcxUlbTQVXzEFWkwVYsUlaz0hag0VYWMWchQWdvU1U1Ulbyk1atQEc4AWYT4VXsUlDMEla0AjzKvPCPDULQISzN7PTvTURtAWczEsCQX0S0QGb0QmDYMWbxAA.RDVclgGVU4FcoQGakQFBWPRJ13iQKAUUVsUWeIFYp0Fc4sGf........AD..........V....................jH</STATE>
+    <LAYOUT>
+      <INPUTS>
+        <BUS index="0" layout="L R"/>
+      </INPUTS>
+      <OUTPUTS>
+        <BUS index="0" layout="L R"/>
+      </OUTPUTS>
+    </LAYOUT>
+  </FILTER>
   <CONNECTION srcFilter="2" srcChannel="4096" dstFilter="9" dstChannel="4096"/>
-  <CONNECTION srcFilter="7" srcChannel="0" dstFilter="3" dstChannel="0"/>
-  <CONNECTION srcFilter="7" srcChannel="1" dstFilter="3" dstChannel="1"/>
-  <CONNECTION srcFilter="9" srcChannel="0" dstFilter="7" dstChannel="0"/>
-  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="7" dstChannel="1"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="8" dstChannel="0"/>
+  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="8" dstChannel="1"/>
+  <CONNECTION srcFilter="8" srcChannel="0" dstFilter="3" dstChannel="0"/>
+  <CONNECTION srcFilter="8" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="9" srcChannel="0" dstFilter="8" dstChannel="0"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="8" dstChannel="1"/>
 </FILTERGRAPH>
