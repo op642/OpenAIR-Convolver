@@ -46,7 +46,8 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
             {
                 audioProcessor.savedIRFile = file;
                 audioProcessor.root = file.getParentDirectory().getFullPathName();
-                audioProcessor.convolution.loadImpulseResponse(file, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
+                audioProcessor.convolution.reset();
+                audioProcessor.convolution.loadImpulseResponse(audioProcessor.savedIRFile, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
                 
                 std::cout << "Loaded IR: " << file.getFullPathName() << std::endl;
             }

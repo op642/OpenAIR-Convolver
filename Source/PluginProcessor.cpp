@@ -150,8 +150,9 @@ void OpenAIRConvolverAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     
     if (convolution.getCurrentIRSize() > 0){
         juce::dsp::ProcessContextReplacing<float> context(block);
+        convolution.process(context);
     }
-//    convolution.process(context);
+
 }
 
 bool OpenAIRConvolverAudioProcessor::hasEditor() const
