@@ -9,8 +9,97 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+// Helper function to convert B-format IR to stereo
+void convertBFormatToStereo(const juce::AudioBuffer<float>& bFormatBuffer, juce::AudioBuffer<float>& stereoBuffer)
+{
+    jassert(bFormatBuffer.getNumChannels() >= 3); // Ensure there are at least W, X, and Y channels
+
+    int numSamples = bFormatBuffer.getNumSamples();
+    stereoBuffer.setSize(2, numSamples); // Set stereo buffer to 2 channels
+
+    auto* wChannel = bFormatBuffer.getReadPointer(0);
+    auto* xChannel = bFormatBuffer.getReadPointer(1);
+    auto* yChannel = bFormatBuffer.getReadPointer(2);
+
+    auto* leftChannel = stereoBuffer.getWritePointer(0);
+    auto* rightChannel = stereoBuffer.getWritePointer(1);
+
+    for (int i = 0; i < numSamples; ++i)
+    {
+        leftChannel[i] = 0.707f * (wChannel[i] + xChannel[i] - yChannel[i]);
+        rightChannel[i] = 0.707f * (wChannel[i] - xChannel[i] + yChannel[i]);
+    }
+}
+
+bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+{
+    // Add your implementation here
+    return true;
+}
+
+const juce::String OpenAIRConvolverAudioProcessor::getName() const
+{
+    return JucePlugin_Name;
+}
+
+bool OpenAIRConvolverAudioProcessor::acceptsMidi() const
+{
+    return JucePlugin_WantsMidiInput;
+}
+
+bool OpenAIRConvolverAudioProcessor::producesMidi() const
+{
+    return JucePlugin_ProducesMidiOutput;
+}
+
+bool OpenAIRConvolverAudioProcessor::isMidiEffect() const
+{
+    return JucePlugin_IsMidiEffect;
+}
+
+double OpenAIRConvolverAudioProcessor::getTailLengthSeconds() const
+{
+    return 0.0;
+}
+
+int OpenAIRConvolverAudioProcessor::getNumPrograms()
+{
+    return 1; // NB: some hosts don't cope very well if you tell them there are 0 programs,
+              // so this should be at least 1, even if you're not really implementing programs.
+}
+
+int OpenAIRConvolverAudioProcessor::getCurrentProgram()
+{
+    return 0;
+}
+
+void OpenAIRConvolverAudioProcessor::setCurrentProgram(int index)
+{
+}
+
+const juce::String OpenAIRConvolverAudioProcessor::getProgramName(int index)
+{
+    return {};
+}
+
+void OpenAIRConvolverAudioProcessor::changeProgramName(int index, const juce::String& newName)
+{
+}
+
+void OpenAIRConvolverAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
+{
+    // Add your implementation here
+}
+
+void OpenAIRConvolverAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
+{
+    // Add your implementation here
+}
+
+
 //==============================================================================
-OpenAIR_ConvolverAudioProcessor::OpenAIR_ConvolverAudioProcessor()
+// Constructor and Destructor
+OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -24,168 +113,60 @@ OpenAIR_ConvolverAudioProcessor::OpenAIR_ConvolverAudioProcessor()
 {
 }
 
-OpenAIR_ConvolverAudioProcessor::~OpenAIR_ConvolverAudioProcessor()
+OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor()
 {
 }
 
 //==============================================================================
-const juce::String OpenAIR_ConvolverAudioProcessor::getName() const
+// Prepare to Play
+void OpenAIRConvolverAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    return JucePlugin_Name;
+    processSpec.sampleRate = sampleRate;
+    processSpec.maximumBlockSize = samplesPerBlock;
+    processSpec.numChannels = getTotalNumOutputChannels();
+
+    convolution.reset();
+    convolution.prepare(processSpec);
 }
 
-bool OpenAIR_ConvolverAudioProcessor::acceptsMidi() const
+// Release Resources
+void OpenAIRConvolverAudioProcessor::releaseResources()
 {
-   #if JucePlugin_WantsMidiInput
-    return true;
-   #else
-    return false;
-   #endif
-}
-
-bool OpenAIR_ConvolverAudioProcessor::producesMidi() const
-{
-   #if JucePlugin_ProducesMidiOutput
-    return true;
-   #else
-    return false;
-   #endif
-}
-
-bool OpenAIR_ConvolverAudioProcessor::isMidiEffect() const
-{
-   #if JucePlugin_IsMidiEffect
-    return true;
-   #else
-    return false;
-   #endif
-}
-
-double OpenAIR_ConvolverAudioProcessor::getTailLengthSeconds() const
-{
-    return 0.0;
-}
-
-int OpenAIR_ConvolverAudioProcessor::getNumPrograms()
-{
-    return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-                // so this should be at least 1, even if you're not really implementing programs.
-}
-
-int OpenAIR_ConvolverAudioProcessor::getCurrentProgram()
-{
-    return 0;
-}
-
-void OpenAIR_ConvolverAudioProcessor::setCurrentProgram (int index)
-{
-}
-
-const juce::String OpenAIR_ConvolverAudioProcessor::getProgramName (int index)
-{
-    return {};
-}
-
-void OpenAIR_ConvolverAudioProcessor::changeProgramName (int index, const juce::String& newName)
-{
+    convolution.reset();
 }
 
 //==============================================================================
-void OpenAIR_ConvolverAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
-{
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
-}
-
-void OpenAIR_ConvolverAudioProcessor::releaseResources()
-{
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
-}
-
-#ifndef JucePlugin_PreferredChannelConfigurations
-bool OpenAIR_ConvolverAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
-{
-  #if JucePlugin_IsMidiEffect
-    juce::ignoreUnused (layouts);
-    return true;
-  #else
-    // This is the place where you check if the layout is supported.
-    // In this template code we only support mono or stereo.
-    // Some plugin hosts, such as certain GarageBand versions, will only
-    // load plugins that support stereo bus layouts.
-    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-     && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-        return false;
-
-    // This checks if the input layout matches the output layout
-   #if ! JucePlugin_IsSynth
-    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-        return false;
-   #endif
-
-    return true;
-  #endif
-}
-#endif
-
-void OpenAIR_ConvolverAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+// Process Block
+void OpenAIRConvolverAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+    juce::dsp::AudioBlock<float> block(buffer);
+    
+    if (convolution.getCurrentIRSize() > 0){
+        juce::dsp::ProcessContextReplacing<float> context(block);
+        convolution.process(context);
     }
+
+}
+
+bool OpenAIRConvolverAudioProcessor::hasEditor() const
+{
+    return true;
+}
+juce::AudioProcessorEditor* OpenAIRConvolverAudioProcessor::createEditor()
+{
+    return new OpenAIRConvolverAudioProcessorEditor (*this);
 }
 
 //==============================================================================
-bool OpenAIR_ConvolverAudioProcessor::hasEditor() const
-{
-    return true; // (change this to false if you choose to not supply an editor)
-}
-
-juce::AudioProcessorEditor* OpenAIR_ConvolverAudioProcessor::createEditor()
-{
-    return new OpenAIR_ConvolverAudioProcessorEditor (*this);
-}
-
-//==============================================================================
-void OpenAIR_ConvolverAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
-{
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
-}
-
-void OpenAIR_ConvolverAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
-{
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
-}
-
-//==============================================================================
-// This creates new instances of the plugin..
+// Create Plugin Filter
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new OpenAIR_ConvolverAudioProcessor();
+    return new OpenAIRConvolverAudioProcessor();
 }

@@ -14,20 +14,26 @@
 //==============================================================================
 /**
 */
-class OpenAIR_ConvolverAudioProcessorEditor  : public juce::AudioProcessorEditor
+class OpenAIRConvolverAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
-    OpenAIR_ConvolverAudioProcessorEditor (OpenAIR_ConvolverAudioProcessor&);
-    ~OpenAIR_ConvolverAudioProcessorEditor() override;
+    OpenAIRConvolverAudioProcessorEditor (OpenAIRConvolverAudioProcessor&);
+    ~OpenAIRConvolverAudioProcessorEditor() override;
 
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
+    // void comboBoxChanged(juce::ComboBox* irSelectionBox) override;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
-    OpenAIR_ConvolverAudioProcessor& audioProcessor;
+    OpenAIRConvolverAudioProcessor& audioProcessor;
+    
+    juce::TextButton loadIRButton;
+    
+    std::unique_ptr<juce::FileChooser> fileChooser;
+//    juce::ComboBox irSelectionBox;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIR_ConvolverAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessorEditor)
 };
