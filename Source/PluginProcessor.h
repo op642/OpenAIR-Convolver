@@ -56,6 +56,8 @@ public:
     juce::File root, savedIRFile;
     // Add the convolution processor
     juce::dsp::Convolution convolution;
+    
+    juce::dsp::Convolution::Convolution::NonUniform NUP;
 
 private:
     juce::dsp::ProcessSpec processSpec;

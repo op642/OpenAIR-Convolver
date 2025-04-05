@@ -108,9 +108,12 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+    convolution(NUP)
 #endif
 {
+    NUP.headSizeInSamples = 256;
+    DBG("NonUniform head size set to: " << NUP.headSizeInSamples);
 }
 
 OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor()
@@ -124,9 +127,11 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay (double sampleRate, int sampl
     processSpec.sampleRate = sampleRate;
     processSpec.maximumBlockSize = samplesPerBlock;
     processSpec.numChannels = getTotalNumOutputChannels();
-
+    
     convolution.reset();
     convolution.prepare(processSpec);
+    DBG("Convolution prepared with NonUniform partitioning.");
+    
 }
 
 // Release Resources
