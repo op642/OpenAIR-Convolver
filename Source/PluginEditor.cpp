@@ -34,7 +34,7 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
     addAndMakeVisible(loadIRButton);
     loadIRButton.setButtonText("Load IR");
     loadIRButton.onClick = [this] {
-        fileChooser = std::make_unique<juce::FileChooser>("Select an IR file", audioProcessor.root, "*");
+        fileChooser = std::make_unique<juce::FileChooser>("Select an IR file", audioProcessor.getRoot(), "*");
         
         const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles | juce::FileBrowserComponent::canSelectDirectories;
         
@@ -42,18 +42,17 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
         {
             juce::File file = chooser.getResult();
             
-            if (file.getFileExtension() == ".wav" | file.getFileExtension() == ".aif" | file.getFileExtension() == ".aiff" | file.getFileExtension() == ".mp3")
+            if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif" || file.getFileExtension() == ".aiff" || file.getFileExtension() == ".mp3")
             {
-                audioProcessor.savedIRFile = file;
-                audioProcessor.root = file.getParentDirectory().getFullPathName();
-                audioProcessor.convolution.reset();
-                audioProcessor.convolution.loadImpulseResponse(audioProcessor.savedIRFile, juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
+                audioProcessor.setSavedIRFile(file);
+                audioProcessor.setRoot(file.getParentDirectory());
+                audioProcessor.getConvolution().reset();
+                audioProcessor.getConvolution().loadImpulseResponse(audioProcessor.getSavedIRFile(), juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
                 
                 std::cout << "Loaded IR: " << file.getFullPathName() << std::endl;
             }
             
         });
-        
     };
     setSize (400, 300);
 

@@ -16,7 +16,7 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
     convolution(NUP)
 #endif
 {
-    NUP.headSizeInSamples = 256;
+    NUP.headSizeInSamples = 256; // Default head size for non-uniform convolution for long IRs
     DBG("NonUniform head size set to: " << NUP.headSizeInSamples);
 }
 
@@ -26,7 +26,6 @@ OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor() {}
 // Prepare to Play
 void OpenAIRConvolverAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    juce::dsp::ProcessSpec spec;
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
@@ -144,4 +143,34 @@ juce::AudioProcessorEditor* OpenAIRConvolverAudioProcessor::createEditor()
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new OpenAIRConvolverAudioProcessor();
+}
+
+//==============================================================================
+// Getters and Setters
+
+// Getter and Setter for root
+juce::File OpenAIRConvolverAudioProcessor::getRoot() const {
+    return root;
+}
+
+void OpenAIRConvolverAudioProcessor::setRoot(const juce::File& newRoot) {
+    root = newRoot;
+}
+
+// Getter and Setter for savedIRFile
+juce::File OpenAIRConvolverAudioProcessor::getSavedIRFile() const {
+    return savedIRFile;
+}
+
+void OpenAIRConvolverAudioProcessor::setSavedIRFile(const juce::File& newSavedIRFile) {
+    savedIRFile = newSavedIRFile;
+}
+
+// Getter and Setter for convolution
+juce::dsp::Convolution& OpenAIRConvolverAudioProcessor::getConvolution() {
+    return convolution;
+}
+
+void OpenAIRConvolverAudioProcessor::setConvolution(const juce::dsp::Convolution& newConvolution) {
+    convolution.loadImpulseResponse(getSavedIRFile(), juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
 }

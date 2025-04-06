@@ -53,14 +53,22 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
+    juce::File getRoot() const;
+    void setRoot(const juce::File& newRoot);
+
+    juce::File getSavedIRFile() const;
+    void setSavedIRFile(const juce::File& newSavedIRFile);
+
+    juce::dsp::Convolution& getConvolution();
+    void setConvolution(const juce::dsp::Convolution& newConvolution);
+    
+private:
+    juce::dsp::ProcessSpec spec;
     juce::File root, savedIRFile;
     // Add the convolution processor
     juce::dsp::Convolution convolution;
     
     juce::dsp::Convolution::Convolution::NonUniform NUP;
-
-private:
-    juce::dsp::ProcessSpec processSpec;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessor)
