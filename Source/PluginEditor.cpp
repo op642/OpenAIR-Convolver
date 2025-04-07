@@ -34,7 +34,7 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
     addAndMakeVisible(loadIRButton);
     loadIRButton.setButtonText("Load IR");
     loadIRButton.onClick = [this] {
-        fileChooser = std::make_unique<juce::FileChooser>("Select an IR file", audioProcessor.getRoot(), "*");
+        fileChooser = std::make_unique<juce::FileChooser>("Select a B-format file", audioProcessor.getRoot(), "*");
         
         const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles | juce::FileBrowserComponent::canSelectDirectories;
         
@@ -44,6 +44,10 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
             
             if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif" || file.getFileExtension() == ".aiff" || file.getFileExtension() == ".mp3")
             {
+                audioProcessor.loadAndDecodeBFormatFile(file);
+                std::cout << "Loaded and decoded B-Format file: " << file.getFullPathName() << std::endl;
+                
+                
                 audioProcessor.setSavedIRFile(file);
                 audioProcessor.setRoot(file.getParentDirectory());
                 audioProcessor.getConvolution().reset();

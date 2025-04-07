@@ -62,6 +62,13 @@ public:
     juce::dsp::Convolution& getConvolution();
     void setConvolution(const juce::dsp::Convolution& newConvolution);
     
+    void decodeBFormatTo5Point1(const juce::File& bFormatFile,
+                                juce::AudioBuffer<float>& outputBuffer);
+    void loadBFormatFile(const juce::File& bFormatFile, juce::AudioBuffer<float>& bFormatBuffer);
+    
+    void loadAndDecodeBFormatFile(const juce::File& bFormatFile);
+                                                         
+    
 private:
     juce::dsp::ProcessSpec spec;
     juce::File root, savedIRFile;
@@ -69,7 +76,8 @@ private:
     juce::dsp::Convolution convolution;
     
     juce::dsp::Convolution::Convolution::NonUniform NUP;
-
+    std::vector<juce::dsp::Convolution> convolutions;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessor)
 };
