@@ -52,3 +52,8 @@ void IRLoader::processPendingBuffers(std::vector<std::unique_ptr<juce::dsp::Conv
         bufferReady.store(false);
     }
 }
+
+bool IRLoader::isBufferReady() const
+{
+    return bufferReady.load();
+}

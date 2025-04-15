@@ -20,6 +20,7 @@ class IRLoader
 public:
     void loadMultichannelIRFile(const juce::File& irFile, double sampleRate, int numChannels);
     void processPendingBuffers(std::vector<std::unique_ptr<juce::dsp::Convolution>>& convolutions, double sampleRate);
+    bool isBufferReady() const;
 
 private:
     std::queue<std::vector<juce::AudioBuffer<float>>> bufferQueue;

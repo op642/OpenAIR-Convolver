@@ -8,7 +8,7 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
     : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::mono(), true)
+                       .withInput  ("Input",  juce::AudioChannelSet::create5point1(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::create5point1(), true)
                      #endif
@@ -25,6 +25,18 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
 
 OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor()
 {
+}
+
+//==============================================================================
+// Buses Layout Supported
+bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+{
+    // Check if the input is mono and the output is 5.1 surround
+    const auto& mainInput = layouts.getMainInputChannelSet();
+    const auto& mainOutput = layouts.getMainOutputChannelSet();
+
+    return mainInput == juce::AudioChannelSet::create5point1()
+        && mainOutput == juce::AudioChannelSet::create5point1();
 }
 
 void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
@@ -80,12 +92,16 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
 {
     juce::ScopedNoDenormals noDenormals;
 
-    // Process pending IR buffers for multichannel convolutions
-    irLoader.processPendingBuffers(convolutions, getSampleRate());
+    // Check if new IRs need to be processed
+    if (irLoader.isBufferReady())
+    {
+        irLoader.processPendingBuffers(convolutions, getSampleRate());
+    }
 
-    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    // Clear unused output channels
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
@@ -94,26 +110,13 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
     // Process each channel's convolution
     for (size_t i = 0; i < convolutions.size(); ++i)
     {
-        if (convolutions[i]->getCurrentIRSize() > 0)
+        if (i < block.getNumChannels() && convolutions[i]->getCurrentIRSize() > 0)
         {
             auto channelBlock = block.getSingleChannelBlock((int)i);
             juce::dsp::ProcessContextReplacing<float> context(channelBlock);
             convolutions[i]->process(context);
         }
     }
-}
-
-
-//==============================================================================
-// Buses Layout Supported
-bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
-{
-    // Check if the input is mono and the output is 5.1 surround
-    const auto& mainInput = layouts.getMainInputChannelSet();
-    const auto& mainOutput = layouts.getMainOutputChannelSet();
-
-    return mainInput == juce::AudioChannelSet::mono()
-        && mainOutput == juce::AudioChannelSet::create5point1();
 }
 
 //==============================================================================
