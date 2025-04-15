@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
 
 
@@ -34,33 +35,25 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
     addAndMakeVisible(loadIRButton);
     loadIRButton.setButtonText("Load IR");
     loadIRButton.onClick = [this] {
-        fileChooser = std::make_unique<juce::FileChooser>("Select a B-format file", audioProcessor.getRoot(), "*");
-        
-        const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles | juce::FileBrowserComponent::canSelectDirectories;
-        
+        fileChooser = std::make_unique<juce::FileChooser>("Select an IR file", audioProcessor.getRoot(), "*");
+
+        const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+
         fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
         {
             juce::File file = chooser.getResult();
-            
-            if (file.getFileExtension() == ".wav" || file.getFileExtension() == ".aif" || file.getFileExtension() == ".aiff" || file.getFileExtension() == ".mp3")
+            if (file.existsAsFile())
             {
-                audioProcessor.loadAndDecodeBFormatFile(file);
-                std::cout << "Loaded and decoded B-Format file: " << file.getFullPathName() << std::endl;
-                
-                
-                audioProcessor.setSavedIRFile(file);
-                audioProcessor.setRoot(file.getParentDirectory());
-                audioProcessor.getConvolution().reset();
-                audioProcessor.getConvolution().loadImpulseResponse(audioProcessor.getSavedIRFile(), juce::dsp::Convolution::Stereo::yes, juce::dsp::Convolution::Trim::yes, 0);
-                
-                std::cout << "Loaded IR: " << file.getFullPathName() << std::endl;
+                audioProcessor.loadIRFile(file);
             }
-            
         });
     };
     setSize (400, 300);
 
 }
+
+
+
 
 void OpenAIRConvolverAudioProcessorEditor::resized()
 {

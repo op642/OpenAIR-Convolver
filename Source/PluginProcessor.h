@@ -9,12 +9,59 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "IRLoader.h"
+
 
 //==============================================================================
 /**
 */
+
 class OpenAIRConvolverAudioProcessor  : public juce::AudioProcessor
 {
+public:
+    juce::File getRoot() const;
+    void setRoot(const juce::File& newRoot);
+
+    juce::File getSavedIRFile() const;
+    void setSavedIRFile(const juce::File& newSavedIRFile);
+
+    juce::dsp::Convolution& getConvolution();
+    void setConvolution(const juce::dsp::Convolution& newConvolution);
+    
+    void decodeBFormatTo5Point1(const juce::File& bFormatFile,
+                                juce::AudioBuffer<float>& outputBuffer);
+    void loadBFormatFile(const juce::File& bFormatFile, juce::AudioBuffer<float>& bFormatBuffer);
+    
+    void loadAndDecodeBFormatFile(const juce::File& bFormatFile);
+    
+    std::vector<juce::AudioBuffer<float>> loadMultichannelIRFile(const juce::File& irFile);
+    
+    const std::vector<std::unique_ptr<juce::dsp::Convolution>>& getConvolutions() const;
+    
+    void loadIRFile(const juce::File& irFile);
+
+    
+
+    
+private:
+    juce::dsp::ProcessSpec spec;
+    juce::File root, savedIRFile;
+    std::vector<std::unique_ptr<juce::dsp::Convolution>> convolutions;
+    
+    IRLoader irLoader;
+    juce::dsp::Convolution convolution;
+    juce::dsp::Convolution::Convolution::NonUniform NUP;
+    
+    juce::AudioBuffer<float> decodedIRBuffer;
+    std::vector<juce::AudioBuffer<float>> monoIRBuffers;
+    
+    
+    
+    
+    /*==============================================================================
+    ============================= JUCE Functions ===================================
+    ==============================================================================*/
+    
 public:
     //==============================================================================
     OpenAIRConvolverAudioProcessor();
@@ -53,31 +100,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    juce::File getRoot() const;
-    void setRoot(const juce::File& newRoot);
-
-    juce::File getSavedIRFile() const;
-    void setSavedIRFile(const juce::File& newSavedIRFile);
-
-    juce::dsp::Convolution& getConvolution();
-    void setConvolution(const juce::dsp::Convolution& newConvolution);
-    
-    void decodeBFormatTo5Point1(const juce::File& bFormatFile,
-                                juce::AudioBuffer<float>& outputBuffer);
-    void loadBFormatFile(const juce::File& bFormatFile, juce::AudioBuffer<float>& bFormatBuffer);
-    
-    void loadAndDecodeBFormatFile(const juce::File& bFormatFile);
-                                                         
-    
 private:
-    juce::dsp::ProcessSpec spec;
-    juce::File root, savedIRFile;
-    // Add the convolution processor
-    juce::dsp::Convolution convolution;
-    
-    juce::dsp::Convolution::Convolution::NonUniform NUP;
-    std::vector<juce::dsp::Convolution> convolutions;
-    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessor)
 };
