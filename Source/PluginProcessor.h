@@ -39,6 +39,8 @@ public:
     const std::vector<std::unique_ptr<juce::dsp::Convolution>>& getConvolutions() const;
     
     void loadIRFile(const juce::File& irFile);
+    
+    void preloadIRFile(const juce::File& irFile);
 
     
 
@@ -49,7 +51,6 @@ private:
     std::vector<std::unique_ptr<juce::dsp::Convolution>> convolutions;
     
     IRLoader irLoader;
-    juce::dsp::Convolution convolution;
     juce::dsp::Convolution::Convolution::NonUniform NUP;
     
     juce::AudioBuffer<float> decodedIRBuffer;

@@ -45,6 +45,7 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (Open
             if (file.existsAsFile())
             {
                 audioProcessor.loadIRFile(file);
+//                audioProcessor.preloadIRFile(file); // Preload the IR file
             }
         });
     };

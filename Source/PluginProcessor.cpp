@@ -12,7 +12,8 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::create5point1(), true)
                      #endif
-                       )
+                       ),
+    irLoader(6) // potentially change to match output channels
 {
     //Empty constructor
 }
@@ -53,13 +54,15 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int sample
     convolutions.resize(spec.numChannels);
     for (auto& conv : convolutions)
     {
-        conv = std::make_unique<juce::dsp::Convolution>(NUP);
+        conv = std::make_unique<juce::dsp::Convolution>(NUP); //NUP
     }
 
     // Prepare each convolution processor
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
+    NUP.headSizeInSamples = spec.maximumBlockSize;
+    DBG("block size in samples: " << samplesPerBlock);
 
     for (auto& conv : convolutions)
     {
@@ -107,6 +110,9 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
 
     juce::dsp::AudioBlock<float> block(buffer);
 
+    // Debugging: Measure processing time
+    // auto startTime = juce::Time::getMillisecondCounter();
+
     // Process each channel's convolution
     for (size_t i = 0; i < convolutions.size(); ++i)
     {
@@ -117,8 +123,11 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
             convolutions[i]->process(context);
         }
     }
-}
 
+    // auto endTime = juce::Time::getMillisecondCounter();
+//    float procTime = endTime-startTime;
+//    DBG("Convolution processing time: " << (procTime) << " ms");
+}
 //==============================================================================
 // Editor
 bool OpenAIRConvolverAudioProcessor::hasEditor() const
@@ -159,19 +168,51 @@ void OpenAIRConvolverAudioProcessor::setSavedIRFile(const juce::File& newSavedIR
     savedIRFile = newSavedIRFile;
 }
 
-// Getter and Setter for convolution
-juce::dsp::Convolution& OpenAIRConvolverAudioProcessor::getConvolution() {
-    return convolution;
-}
-
-void OpenAIRConvolverAudioProcessor::setConvolution(const juce::dsp::Convolution& newConvolution) {
-    convolution.loadImpulseResponse(getSavedIRFile(), juce::dsp::Convolution::Stereo::no, juce::dsp::Convolution::Trim::yes, 0);
-}
-
 // Getter for convolutions
 const std::vector<std::unique_ptr<juce::dsp::Convolution>>& OpenAIRConvolverAudioProcessor::getConvolutions() const {
     return convolutions;
 }
+
+
+// *************************************************
+// ************* MIGHT REPLACE IRLOADER ************
+// *************************************************
+// might be better to use IRLoader as it is asynchronus
+// just need to find what is causing spikes
+
+//void OpenAIRConvolverAudioProcessor::preloadIRFile(const juce::File& irFile)
+//{
+//    juce::AudioFormatManager formatManager;
+//    formatManager.registerBasicFormats();
+//
+//    std::unique_ptr<juce::AudioFormatReader> reader(formatManager.createReaderFor(irFile));
+//    if (reader != nullptr)
+//    {
+//        std::vector<juce::AudioBuffer<float>> buffers(getTotalNumOutputChannels());
+//
+//        for (int channel = 0; channel < getTotalNumOutputChannels(); ++channel)
+//        {
+//            buffers[channel].setSize(1, (int)reader->lengthInSamples);
+//            reader->read(&buffers[channel], 0, (int)reader->lengthInSamples, channel, true, true);
+//        }
+//
+//        for (size_t i = 0; i < convolutions.size(); ++i)
+//        {
+//            if (i < buffers.size())
+//            {
+//                convolutions[i]->loadImpulseResponse(std::move(buffers[i]),
+//                                                     getSampleRate(),
+//                                                     juce::dsp::Convolution::Stereo::no,
+//                                                     juce::dsp::Convolution::Trim::yes,
+//                                                     juce::dsp::Convolution::Normalise::yes);
+//            }
+//        }
+//    }
+//    else
+//    {
+//        DBG("Failed to preload IR file: " << irFile.getFullPathName());
+//    }
+//}
 
 // ***********************
 // MULTICHANNEL IR LOADING
