@@ -28,22 +28,11 @@ public:
     juce::dsp::Convolution& getConvolution();
     void setConvolution(const juce::dsp::Convolution& newConvolution);
     
-    void decodeBFormatTo5Point1(const juce::File& bFormatFile,
-                                juce::AudioBuffer<float>& outputBuffer);
-    void loadBFormatFile(const juce::File& bFormatFile, juce::AudioBuffer<float>& bFormatBuffer);
-    
-    void loadAndDecodeBFormatFile(const juce::File& bFormatFile);
-    
     std::vector<juce::AudioBuffer<float>> loadMultichannelIRFile(const juce::File& irFile);
     
     const std::vector<std::unique_ptr<juce::dsp::Convolution>>& getConvolutions() const;
     
     void loadIRFile(const juce::File& irFile);
-    
-    void preloadIRFile(const juce::File& irFile);
-
-    
-
     
 private:
     juce::dsp::ProcessSpec spec;

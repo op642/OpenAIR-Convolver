@@ -25,8 +25,13 @@ public:
     ~IRLoader();
 
     void loadMultichannelIRFile(const juce::File& irFile, double sampleRate, int numChannels);
-    void processPendingBuffers(std::vector<std::unique_ptr<juce::dsp::Convolution>>& convolutions, double sampleRate);
+    
+    void processPendingBuffers(std::vector<std::unique_ptr<juce::dsp::Convolution>>& convolutions,
+                               double sampleRate);
     bool isBufferReady() const;
+    
+    void decodeBFormatTo5Point1(const juce::AudioBuffer<float>& bFormatBuffer,
+                                juce::AudioBuffer<float>& outputBuffer);
 
 private:
     void workerThread();
