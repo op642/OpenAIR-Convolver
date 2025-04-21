@@ -24,7 +24,7 @@ public:
     IRLoader(size_t threadPoolSize);
     ~IRLoader();
 
-    void loadMultichannelIRFile(const juce::File& irFile, double sampleRate, int numChannels);
+    void loadBformatIRFile(const juce::File& irFile, double sampleRate, int numChannels);
     
     void processPendingBuffers(std::vector<std::unique_ptr<juce::dsp::Convolution>>& convolutions,
                                double sampleRate);

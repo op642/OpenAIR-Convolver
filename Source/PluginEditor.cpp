@@ -20,6 +20,8 @@ OpenAIRConvolverAudioProcessorEditor::~OpenAIRConvolverAudioProcessorEditor()
 //==============================================================================
 void OpenAIRConvolverAudioProcessorEditor::paint (juce::Graphics& g)
 {
+    // Find a way to load file
+    //g.drawImage(juce::ImageCache::getFromFile(juce::File("Assets/Image/OpenAir_logo.png")), getLocalBounds().toFloat());
     g.fillAll(juce::Colours::black);
 
     g.setColour (juce::Colours::white);

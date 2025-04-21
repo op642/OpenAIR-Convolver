@@ -30,6 +30,10 @@
           </GROUP>
         </GROUP>
       </GROUP>
+      <GROUP id="{716F245C-18BB-5729-1B66-DA1AADCED555}" name="Image">
+        <FILE id="ecWv4C" name="OpenAir_logo.png" compile="0" resource="1"
+              file="Assets/Image/OpenAir_logo.png"/>
+      </GROUP>
     </GROUP>
     <GROUP id="{2A49D1C9-F5B8-3C89-B997-27A3ED5AF4A8}" name="Source">
       <FILE id="YPEBj1" name="IRLoader.cpp" compile="1" resource="0" file="Source/IRLoader.cpp"/>

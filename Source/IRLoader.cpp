@@ -22,7 +22,7 @@ IRLoader::~IRLoader()
     }
 }
 
-void IRLoader::loadMultichannelIRFile(const juce::File& irFile, double sampleRate, int numChannels)
+void IRLoader::loadBformatIRFile(const juce::File& irFile, double sampleRate, int numChannels)
 {
     auto task = [this, irFile, sampleRate]()
     {
@@ -30,7 +30,8 @@ void IRLoader::loadMultichannelIRFile(const juce::File& irFile, double sampleRat
         formatManager.registerBasicFormats();
 
         std::unique_ptr<juce::AudioFormatReader> reader(formatManager.createReaderFor(irFile));
-        if (reader != nullptr && reader->numChannels == 4) // Ensure it's a B-Format file
+        // check file is 4 channel B-Format
+        if (reader != nullptr && reader->numChannels == 4)
         {
             juce::AudioBuffer<float> bFormatBuffer;
             bFormatBuffer.setSize(4, (int)reader->lengthInSamples);
@@ -39,8 +40,7 @@ void IRLoader::loadMultichannelIRFile(const juce::File& irFile, double sampleRat
 
             // Decode B-Format to 5.1
             juce::AudioBuffer<float> surroundBuffer;
-            surroundBuffer.setSize(6, bFormatBuffer.getNumSamples()); // 5.1 has 6 channels
-
+            surroundBuffer.setSize(6, bFormatBuffer.getNumSamples()); // 6ch = 5.1
             decodeBFormatTo5Point1(bFormatBuffer, surroundBuffer);
 
             // Push the decoded buffer to the queue
@@ -146,46 +146,3 @@ void IRLoader::decodeBFormatTo5Point1(const juce::AudioBuffer<float>& bFormatBuf
         Rs[i] = 0.707f * (W[i] - Y[i]);
     }
 }
-//
-//void OpenAIRConvolverAudioProcessor::loadBFormatFile(const juce::File& bFormatFile, juce::AudioBuffer<float>& bFormatBuffer)
-//{
-//    juce::AudioFormatManager formatManager;
-//    formatManager.registerBasicFormats();
-//
-//    std::unique_ptr<juce::AudioFormatReader> reader(formatManager.createReaderFor(bFormatFile));
-//    if (reader != nullptr)
-//    {
-//        bFormatBuffer.setSize((int)reader->numChannels, (int)reader->lengthInSamples);
-//        reader->read(&bFormatBuffer, 0, (int)reader->lengthInSamples, 0, true, true);
-//    }
-//}
-//
-//void OpenAIRConvolverAudioProcessor::loadAndDecodeBFormatFile(const juce::File& bFormatFile)
-//{
-//    if (!bFormatFile.existsAsFile())
-//    {
-//        DBG("File does not exist: " << bFormatFile.getFullPathName());
-//        return;
-//    }
-//
-//    juce::AudioBuffer<float> outputBuffer;
-//    outputBuffer.setSize(6, 0); // 5.1 format has 6 channels
-//
-//    decodeBFormatTo5Point1(bFormatFile, outputBuffer);
-//
-//    decodedIRBuffer = outputBuffer;
-//
-//    // Set the saved IR file and root directory
-//    setSavedIRFile(bFormatFile);
-//    setRoot(bFormatFile.getParentDirectory());
-//
-//    // Reset and load the convolution processors
-//    for (int channel = 0; channel < convolutions.size(); ++channel)
-//    {
-//        convolutions[channel]->reset();
-//        juce::AudioBuffer<float> monoIRBuffer(1, decodedIRBuffer.getNumSamples());
-//        monoIRBuffer.copyFrom(0, 0, decodedIRBuffer, channel, 0, decodedIRBuffer.getNumSamples());
-//
-//        convolutions[channel]->loadImpulseResponse(bFormatFile, juce::dsp::Convolution::Stereo::no, juce::dsp::Convolution::Trim::yes, 0);
-//    }
-//}

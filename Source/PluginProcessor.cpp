@@ -2,6 +2,17 @@
 #include "PluginEditor.h"
 #include "IRLoader.h"
 
+/* OpenAIR Convolver
+ Oliver Partridge
+ 21/04/2025
+ 
+This Program produces a 5.1 surround sound convolver plugin using JUCE.
+IRLoader is a custom class that loads and decodes bformat IR files to 5.1 surround.
+
+Non-uniform Partitioned Convolution is implemented through the JUCE DSP module.
+*/
+
+
 //==============================================================================
 // Constructor and Destructor
 OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
@@ -13,16 +24,10 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::create5point1(), true)
                      #endif
                        ),
-    irLoader(6) // potentially change to match output channels
+    irLoader(6) // potentially change to match output channels 6ch = 5.1
 {
     //Empty constructor
 }
-/*
- Xcode is probably shitting itself because of the file is 4 channels and convolution only supports 2 channels,
- the channels need to be split up and processed independantly and then recombined.
- 
- INPUT SHOULD BE MONO, BUT SHOULD APPLY TO ALL OUTPUT CHANNELS.
- */
 
 OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor()
 {
@@ -44,7 +49,7 @@ bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& l
 
 void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
 {
-    irLoader.loadMultichannelIRFile(irFile, getSampleRate(), getTotalNumOutputChannels());
+    irLoader.loadBformatIRFile(irFile, getSampleRate(), getTotalNumOutputChannels());
 }
 
 
@@ -59,7 +64,6 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int sample
         conv = std::make_unique<juce::dsp::Convolution>(NUP); //NUP
     }
     NUP.headSizeInSamples = 4096*4; // 16k seems to work well for 5.1
-    // PLAY AOUND WITH NUP AND HEADSIZE
 
     // Prepare each convolution processor
     spec.sampleRate = sampleRate;
@@ -114,7 +118,7 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
     juce::dsp::AudioBlock<float> block(buffer);
 
 //     Debugging: Measure processing time
-     auto startTime = juce::Time::getMillisecondCounter();
+//     auto startTime = juce::Time::getMillisecondCounter();
 
     // Process each channel's convolution
     for (size_t i = 0; i < convolutions.size(); ++i)
@@ -127,9 +131,9 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
         }
     }
 
-     auto endTime = juce::Time::getMillisecondCounter();
-    float procTime = endTime-startTime;
-    DBG("Convolution processing time: " << (procTime) << " ms");
+//     auto endTime = juce::Time::getMillisecondCounter();
+//    float procTime = endTime-startTime;
+//    DBG("Convolution processing time: " << (procTime) << " ms");
 }
 //==============================================================================
 // Editor
