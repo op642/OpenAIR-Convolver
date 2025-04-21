@@ -56,12 +56,13 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int sample
     {
         conv = std::make_unique<juce::dsp::Convolution>(NUP); //NUP
     }
+    NUP.headSizeInSamples = 4096*4;
+    // PLAY AOUND WITH NUP AND HEADSIZE
 
     // Prepare each convolution processor
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getTotalNumOutputChannels();
-    NUP.headSizeInSamples = spec.maximumBlockSize;
     DBG("block size in samples: " << samplesPerBlock);
 
     for (auto& conv : convolutions)
