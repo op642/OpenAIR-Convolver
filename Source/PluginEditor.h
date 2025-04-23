@@ -25,6 +25,7 @@ public:
     void resized() override;
 
 private:
+    juce::Image background;
     // void comboBoxChanged(juce::ComboBox* irSelectionBox) override;
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.

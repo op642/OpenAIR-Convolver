@@ -1,42 +1,194 @@
-/*
-  ==============================================================================
-
-    This file contains the basic framework code for a JUCE plugin processor.
-
-  ==============================================================================
-*/
-
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "IRLoader.h"
 
-// Helper function to convert B-format IR to stereo
-void convertBFormatToStereo(const juce::AudioBuffer<float>& bFormatBuffer, juce::AudioBuffer<float>& stereoBuffer)
+/* OpenAIR Convolver
+ Oliver Partridge
+ 21/04/2025
+ 
+This Program produces a 5.1 surround sound convolver plugin using JUCE.
+IRLoader is a custom class that loads and decodes bformat IR files to 5.1 surround.
+
+Non-uniform Partitioned Convolution is implemented through the JUCE DSP module.
+*/
+
+
+//==============================================================================
+// Constructor and Destructor
+OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
+    : AudioProcessor (BusesProperties()
+                     #if ! JucePlugin_IsMidiEffect
+                      #if ! JucePlugin_IsSynth
+                       .withInput  ("Input",  juce::AudioChannelSet::create5point1(), true)
+                      #endif
+                       .withOutput ("Output", juce::AudioChannelSet::create5point1(), true)
+                     #endif
+                       ),
+    irLoader(6) // potentially change to match output channels 6ch = 5.1
 {
-    jassert(bFormatBuffer.getNumChannels() >= 3); // Ensure there are at least W, X, and Y channels
+    //Empty constructor
+}
 
-    int numSamples = bFormatBuffer.getNumSamples();
-    stereoBuffer.setSize(2, numSamples); // Set stereo buffer to 2 channels
+OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor()
+{
+}
 
-    auto* wChannel = bFormatBuffer.getReadPointer(0);
-    auto* xChannel = bFormatBuffer.getReadPointer(1);
-    auto* yChannel = bFormatBuffer.getReadPointer(2);
+//==============================================================================
+// Buses Layout Supported
+bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+{
+    // Check if the input is mono and the output is 5.1 surround
+    const auto& mainInput = layouts.getMainInputChannelSet();
+    const auto& mainOutput = layouts.getMainOutputChannelSet();
+    
+    return mainInput == mainInput && mainOutput == mainOutput;
 
-    auto* leftChannel = stereoBuffer.getWritePointer(0);
-    auto* rightChannel = stereoBuffer.getWritePointer(1);
+//    return mainInput == juce::AudioChannelSet::create5point1()
+//        && mainOutput == juce::AudioChannelSet::create5point1();
+}
 
-    for (int i = 0; i < numSamples; ++i)
+void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
+{
+    irLoader.loadBformatIRFile(irFile, getSampleRate(), getTotalNumOutputChannels());
+}
+
+
+//==============================================================================
+// Prepare to Play
+void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+{
+    // Ensure the number of channels matches the 5.1 surround format
+    spec.numChannels = 6; // Explicitly set to 6 for 5.1 surround
+    convolutions.resize(spec.numChannels);
+
+    for (auto& conv : convolutions)
     {
-        leftChannel[i] = 0.707f * (wChannel[i] + xChannel[i] - yChannel[i]);
-        rightChannel[i] = 0.707f * (wChannel[i] - xChannel[i] + yChannel[i]);
+        conv = std::make_unique<juce::dsp::Convolution>(NUP);
+    }
+
+    NUP.headSizeInSamples = 4096 * 4; // 16k seems to work well for 5.1
+
+    const int expectedBlockSize = 512;
+    if (samplesPerBlock != expectedBlockSize)
+    {
+        DBG("Warning: Block size changed to " << samplesPerBlock << ". Enforcing block size to " << expectedBlockSize);
+        samplesPerBlock = expectedBlockSize; // Enforce the block size
+    }
+
+    // Prepare each convolution processor
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+
+    for (auto& conv : convolutions)
+    {
+        conv->prepare(spec);
+    }
+
+    // Initialize monoIRBuffers for each channel
+    monoIRBuffers.resize(spec.numChannels);
+    for (auto& buffer : monoIRBuffers)
+    {
+        buffer.setSize(1, samplesPerBlock); // Mono buffer for each channel
+    }
+
+    // Initialize temporary buffers
+    decodedIRBuffer.setSize(spec.numChannels, samplesPerBlock);
+}
+
+// Release Resources
+void OpenAIRConvolverAudioProcessor::releaseResources()
+{
+    for (auto& conv : convolutions)
+    {
+        conv->reset();
     }
 }
 
-bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+//==============================================================================
+// Process Block
+void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    // Add your implementation here
+    juce::ScopedNoDenormals noDenormals;
+
+    // Check if new IRs need to be processed
+    if (irLoader.isBufferReady())
+    {
+        irLoader.processPendingBuffers(convolutions, getSampleRate());
+    }
+
+    auto totalNumInputChannels = getTotalNumInputChannels();
+    auto totalNumOutputChannels = getTotalNumOutputChannels();
+
+    // Clear unused output channels
+    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+        buffer.clear(i, 0, buffer.getNumSamples());
+
+    juce::dsp::AudioBlock<float> block(buffer);
+
+    // Process each channel's convolution
+    for (size_t i = 0; i < convolutions.size(); ++i)
+    {
+        if (i < totalNumOutputChannels && convolutions[i]->getCurrentIRSize() > 0)
+        {
+            auto channelBlock = block.getSingleChannelBlock((int)i);
+            juce::dsp::ProcessContextReplacing<float> context(channelBlock);
+            convolutions[i]->process(context);
+        }
+    }
+//     auto endTime = juce::Time::getMillisecondCounter();
+//    float procTime = endTime-startTime;
+//    DBG("Convolution processing time: " << (procTime) << " ms");
+}
+//==============================================================================
+// Editor
+bool OpenAIRConvolverAudioProcessor::hasEditor() const
+{
     return true;
 }
 
+juce::AudioProcessorEditor* OpenAIRConvolverAudioProcessor::createEditor()
+{
+    return new OpenAIRConvolverAudioProcessorEditor (*this);
+}
+
+//==============================================================================
+// Create Plugin Filter
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+{
+    return new OpenAIRConvolverAudioProcessor();
+}
+
+//==============================================================================
+// Getters and Setters
+
+// Getter and Setter for root
+juce::File OpenAIRConvolverAudioProcessor::getRoot() const {
+    return root;
+}
+
+void OpenAIRConvolverAudioProcessor::setRoot(const juce::File& newRoot) {
+    root = newRoot;
+}
+
+// Getter and Setter for savedIRFile
+juce::File OpenAIRConvolverAudioProcessor::getSavedIRFile() const {
+    return savedIRFile;
+}
+
+void OpenAIRConvolverAudioProcessor::setSavedIRFile(const juce::File& newSavedIRFile) {
+    savedIRFile = newSavedIRFile;
+}
+
+// Getter for convolutions
+const std::vector<std::unique_ptr<juce::dsp::Convolution>>& OpenAIRConvolverAudioProcessor::getConvolutions() const {
+    return convolutions;
+}
+
+// *****************************************************************************
+// ************************* JUCE SETTINGS *************************************
+// *****************************************************************************
+//==============================================================================
+// Plugin Information
 const juce::String OpenAIRConvolverAudioProcessor::getName() const
 {
     return JucePlugin_Name;
@@ -62,10 +214,11 @@ double OpenAIRConvolverAudioProcessor::getTailLengthSeconds() const
     return 0.0;
 }
 
+//==============================================================================
+// Programs
 int OpenAIRConvolverAudioProcessor::getNumPrograms()
 {
-    return 1; // NB: some hosts don't cope very well if you tell them there are 0 programs,
-              // so this should be at least 1, even if you're not really implementing programs.
+    return 1;
 }
 
 int OpenAIRConvolverAudioProcessor::getCurrentProgram()
@@ -86,87 +239,12 @@ void OpenAIRConvolverAudioProcessor::changeProgramName(int index, const juce::St
 {
 }
 
+//==============================================================================
+// State Information
 void OpenAIRConvolverAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-    // Add your implementation here
 }
 
 void OpenAIRConvolverAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
-    // Add your implementation here
-}
-
-
-//==============================================================================
-// Constructor and Destructor
-OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
-                     #if ! JucePlugin_IsMidiEffect
-                      #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                      #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
-                       )
-#endif
-{
-}
-
-OpenAIRConvolverAudioProcessor::~OpenAIRConvolverAudioProcessor()
-{
-}
-
-//==============================================================================
-// Prepare to Play
-void OpenAIRConvolverAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
-{
-    processSpec.sampleRate = sampleRate;
-    processSpec.maximumBlockSize = samplesPerBlock;
-    processSpec.numChannels = getTotalNumOutputChannels();
-
-    convolution.reset();
-    convolution.prepare(processSpec);
-}
-
-// Release Resources
-void OpenAIRConvolverAudioProcessor::releaseResources()
-{
-    convolution.reset();
-}
-
-//==============================================================================
-// Process Block
-void OpenAIRConvolverAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
-{
-    juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
-
-    for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
-    juce::dsp::AudioBlock<float> block(buffer);
-    
-    if (convolution.getCurrentIRSize() > 0){
-        juce::dsp::ProcessContextReplacing<float> context(block);
-        convolution.process(context);
-    }
-
-}
-
-bool OpenAIRConvolverAudioProcessor::hasEditor() const
-{
-    return true;
-}
-juce::AudioProcessorEditor* OpenAIRConvolverAudioProcessor::createEditor()
-{
-    return new OpenAIRConvolverAudioProcessorEditor (*this);
-}
-
-//==============================================================================
-// Create Plugin Filter
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-{
-    return new OpenAIRConvolverAudioProcessor();
 }
