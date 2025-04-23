@@ -57,19 +57,27 @@ void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
 // Prepare to Play
 void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    // Initialize the convolutions vector with 6 convolution processors for 5.1 output
+    // Ensure the number of channels matches the 5.1 surround format
+    spec.numChannels = 6; // Explicitly set to 6 for 5.1 surround
     convolutions.resize(spec.numChannels);
+
     for (auto& conv : convolutions)
     {
-        conv = std::make_unique<juce::dsp::Convolution>(NUP); //NUP
+        conv = std::make_unique<juce::dsp::Convolution>(NUP);
     }
-    NUP.headSizeInSamples = 4096*4; // 16k seems to work well for 5.1
+
+    NUP.headSizeInSamples = 4096 * 4; // 16k seems to work well for 5.1
+
+    const int expectedBlockSize = 512;
+    if (samplesPerBlock != expectedBlockSize)
+    {
+        DBG("Warning: Block size changed to " << samplesPerBlock << ". Enforcing block size to " << expectedBlockSize);
+        samplesPerBlock = expectedBlockSize; // Enforce the block size
+    }
 
     // Prepare each convolution processor
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
-    spec.numChannels = getTotalNumOutputChannels();
-    DBG("block size in samples: " << samplesPerBlock);
 
     for (auto& conv : convolutions)
     {
@@ -82,7 +90,7 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int sample
     {
         buffer.setSize(1, samplesPerBlock); // Mono buffer for each channel
     }
-    
+
     // Initialize temporary buffers
     decodedIRBuffer.setSize(spec.numChannels, samplesPerBlock);
 }
@@ -117,20 +125,16 @@ void OpenAIRConvolverAudioProcessor::processBlock(juce::AudioBuffer<float>& buff
 
     juce::dsp::AudioBlock<float> block(buffer);
 
-//     Debugging: Measure processing time
-//     auto startTime = juce::Time::getMillisecondCounter();
-
     // Process each channel's convolution
     for (size_t i = 0; i < convolutions.size(); ++i)
     {
-        if (i < block.getNumChannels() && convolutions[i]->getCurrentIRSize() > 0)
+        if (i < totalNumOutputChannels && convolutions[i]->getCurrentIRSize() > 0)
         {
             auto channelBlock = block.getSingleChannelBlock((int)i);
             juce::dsp::ProcessContextReplacing<float> context(channelBlock);
             convolutions[i]->process(context);
         }
     }
-
 //     auto endTime = juce::Time::getMillisecondCounter();
 //    float procTime = endTime-startTime;
 //    DBG("Convolution processing time: " << (procTime) << " ms");
