@@ -3,7 +3,7 @@
 <JUCERPROJECT id="ySQRht" name="OpenAIR-Convolver" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1"
               pluginDesc="Convolution Reverb" pluginName="OpenAIR Convolver"
-              companyName="York AudioLab">
+              companyName="York AudioLab" companyWebsite="https://www.openair.hosted.york.ac.uk">
   <MAINGROUP id="LcdVuq" name="OpenAIR-Convolver">
     <GROUP id="{62B158F6-99BC-ECB2-B320-F6FE17F282F7}" name="Assets">
       <GROUP id="{F690ADCA-7911-9742-9CFF-AFD9EC232F94}" name="Audio">
