@@ -36,6 +36,8 @@
       </GROUP>
     </GROUP>
     <GROUP id="{2A49D1C9-F5B8-3C89-B997-27A3ED5AF4A8}" name="Source">
+      <FILE id="FP50Rt" name="irWaveform.cpp" compile="1" resource="0" file="Source/irWaveform.cpp"/>
+      <FILE id="qomvEs" name="irWaveform.h" compile="0" resource="0" file="Source/irWaveform.h"/>
       <FILE id="YPEBj1" name="IRLoader.cpp" compile="1" resource="0" file="Source/IRLoader.cpp"/>
       <FILE id="se4Kme" name="IRLoader.h" compile="0" resource="0" file="Source/IRLoader.h"/>
       <FILE id="pc74Rt" name="PluginProcessor.cpp" compile="1" resource="0"

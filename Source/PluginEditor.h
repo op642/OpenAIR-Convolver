@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+//#include "IRWaveform.h"
 
 //==============================================================================
 /**
@@ -25,16 +26,14 @@ public:
     void resized() override;
 
 private:
+    juce::ComboBox irSelectionBox;
     juce::Image background;
-    // void comboBoxChanged(juce::ComboBox* irSelectionBox) override;
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+//    IRWaveform irWaveform;
     OpenAIRConvolverAudioProcessor& audioProcessor;
     
-    juce::TextButton loadIRButton;
+    //juce::TextButton loadIRButton;
     
-    std::unique_ptr<juce::FileChooser> fileChooser;
-//    juce::ComboBox irSelectionBox;
+    //std::unique_ptr<juce::FileChooser> fileChooser;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OpenAIRConvolverAudioProcessorEditor)
 };

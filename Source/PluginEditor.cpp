@@ -8,6 +8,14 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <map>
+
+const std::map<int, std::pair<const char*, size_t>> irFileMap = {
+    {1, {BinaryData::York_Minster_bformat_48k_wav, BinaryData::York_Minster_bformat_48k_wavSize}},
+    {2, {BinaryData::Usina_bformat_48_wav, BinaryData::Usina_bformat_48_wavSize}},
+    {3, {nullptr, 0}} // Placeholder for other cases
+};
+
 
 
 //==============================================================================
@@ -21,43 +29,49 @@ OpenAIRConvolverAudioProcessorEditor::~OpenAIRConvolverAudioProcessorEditor()
 void OpenAIRConvolverAudioProcessorEditor::paint (juce::Graphics& g)
 {
     g.fillAll(juce::Colours::black);
-    // Find a way to load file
     background = juce::ImageCache::getFromMemory(BinaryData::OpenAir_logo_png, BinaryData::OpenAir_logo_pngSize);
     g.drawImageWithin(background, 15, 30, 0.95*getWidth(), 0.2*getHeight(), juce::RectanglePlacement::fillDestination, false);
     
+    /* ***************************************************************
+    ************************ ADD UNI LOGOS **************************
+    ****************************************************************/
+    // audioLab and UoY
 
     g.setColour (juce::Colours::white);
     g.setFont (juce::FontOptions (30.0f));
-    //g.drawFittedText ("OpenAIR Convolver", getLocalBounds(), juce::Justification::centred, 1);
 }
 
-OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor (OpenAIRConvolverAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor(OpenAIRConvolverAudioProcessor& p)
+    : AudioProcessorEditor(&p), audioProcessor(p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    addAndMakeVisible(loadIRButton);
-    loadIRButton.setButtonText("Load B-Format IR");
-    loadIRButton.onClick = [this] {
-        fileChooser = std::make_unique<juce::FileChooser>("Select a B-Format IR file", audioProcessor.getRoot(), "*");
+    addAndMakeVisible(irSelectionBox);
 
-        const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+    irSelectionBox.addItem("York Minster", 1);
+    irSelectionBox.addItem("Usina del arte", 2);
+    irSelectionBox.addItem("Another", 3);
+    irSelectionBox.setTextWhenNothingSelected("Select An Impulse Response");
 
-        fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+    irSelectionBox.onChange = [this] {
+        auto selectedId = irSelectionBox.getSelectedId();
+        auto it = irFileMap.find(selectedId);
+
+        if (it != irFileMap.end() && it->second.first != nullptr)
         {
-            juce::File file = chooser.getResult();
+            auto file = juce::File::createTempFile("TempIR.wav");
+            file.replaceWithData(it->second.first, it->second.second);
             if (file.existsAsFile())
             {
                 audioProcessor.loadIRFile(file);
             }
-        });
+        }
+        else
+        {
+            DBG("Invalid or unhandled selection");
+        }
     };
-    setSize (400, 300);
 
+    setSize(400, 300);
 }
-
-
-
 
 void OpenAIRConvolverAudioProcessorEditor::resized()
 {
@@ -68,5 +82,33 @@ void OpenAIRConvolverAudioProcessorEditor::resized()
     const auto btnWidth = getWidth() * (0.59);
     const auto btnHeight = (0.1) * getHeight(); //JUCE_LIVE_CONSTANT
     
-    loadIRButton.setBounds(btnX, btnY, btnWidth, btnHeight);
+    irSelectionBox.setBounds(btnX, btnY, btnWidth, btnHeight);
+    //loadIRButton.setBounds(btnX, btnY, btnWidth, btnHeight);
 }
+
+
+//OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor(OpenAIRConvolverAudioProcessor& p)
+//    : AudioProcessorEditor(&p), audioProcessor(p)
+//{
+// THIS CODE CAN BE USED TO ADD A FILE CHOOSER FOR USERS TO LOAD PERSONAL IR'S
+
+//    addAndMakeVisible(loadIRButton);
+//    loadIRButton.setButtonText("Load B-Format IR");
+//    loadIRButton.onClick = [this] {
+//        fileChooser = std::make_unique<juce::FileChooser>("Select a B-Format IR file", audioProcessor.getRoot(), "*");
+//
+//        const auto fileChooserFlags = juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles;
+//
+//        fileChooser->launchAsync(fileChooserFlags, [this](const juce::FileChooser& chooser)
+//        {
+//            juce::File file = chooser.getResult();
+//            if (file.existsAsFile())
+//            {
+//                audioProcessor.loadIRFile(file);
+//            }
+//        }
+//        );
+//    };
+//    setSize (400, 300);
+//
+//}
