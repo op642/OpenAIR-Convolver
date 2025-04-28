@@ -28,6 +28,8 @@ public:
 private:
     juce::ComboBox irSelectionBox;
     juce::Image background;
+    juce::Image audiolab;
+    juce::Image UOY;
 //    IRWaveform irWaveform;
     OpenAIRConvolverAudioProcessor& audioProcessor;
     

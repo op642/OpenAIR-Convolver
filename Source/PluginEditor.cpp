@@ -16,10 +16,7 @@ const std::map<int, std::pair<const char*, size_t>> irFileMap = {
     {3, {nullptr, 0}} // Placeholder for other cases
 };
 
-
-
 //==============================================================================
-
 
 OpenAIRConvolverAudioProcessorEditor::~OpenAIRConvolverAudioProcessorEditor()
 {
@@ -31,14 +28,12 @@ void OpenAIRConvolverAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll(juce::Colours::black);
     background = juce::ImageCache::getFromMemory(BinaryData::OpenAir_logo_png, BinaryData::OpenAir_logo_pngSize);
     g.drawImageWithin(background, 15, 30, 0.95*getWidth(), 0.2*getHeight(), juce::RectanglePlacement::fillDestination, false);
-    
-    /* ***************************************************************
-    ************************ ADD UNI LOGOS **************************
-    ****************************************************************/
-    // audioLab and UoY
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (30.0f));
+    audiolab = juce::ImageCache::getFromMemory(BinaryData::AudioLab_png,
+                                               BinaryData::AudioLab_pngSize);
+    g.drawImageWithin(audiolab, 0.759979*(15), 1.19*200, 0.114773*getWidth(), 0.2*getHeight(), juce::RectanglePlacement::fillDestination, false);
+    UOY = juce::ImageCache::getFromMemory(BinaryData::UOYLogo_png,
+                                               BinaryData::UOYLogo_pngSize);
+    g.drawImageWithin(UOY, 1.17293*250,1.23372*200, 0.2*getWidth(), 0.2*getHeight(), juce::RectanglePlacement::fillDestination, false);
 }
 
 OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor(OpenAIRConvolverAudioProcessor& p)

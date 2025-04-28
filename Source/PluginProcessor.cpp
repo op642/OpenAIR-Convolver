@@ -24,7 +24,7 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::create5point1(), true)
                      #endif
                        ),
-    irLoader(6) // potentially change to match output channels 6ch = 5.1
+    irLoader(6) // 6 threads for 6 channels (5.1)
 {
     //Empty constructor
 }
@@ -49,6 +49,16 @@ bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& l
 
 void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
 {
+    if (!irFile.existsAsFile())
+    {
+        juce::NativeMessageBox::showMessageBoxAsync(
+            juce::AlertWindow::WarningIcon,
+            "File Loading Error",
+            "The selected IR file could not be found or loaded. Please check the file and try again."
+        );
+        return;
+    }
+
     irLoader.loadBformatIRFile(irFile, getSampleRate(), getTotalNumOutputChannels());
 }
 

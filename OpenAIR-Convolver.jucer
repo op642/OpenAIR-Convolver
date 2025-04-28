@@ -31,8 +31,10 @@
         </GROUP>
       </GROUP>
       <GROUP id="{716F245C-18BB-5729-1B66-DA1AADCED555}" name="Image">
+        <FILE id="zBjOUV" name="AudioLab.png" compile="0" resource="1" file="Assets/Image/AudioLab.png"/>
         <FILE id="ecWv4C" name="OpenAir_logo.png" compile="0" resource="1"
               file="Assets/Image/OpenAir_logo.png"/>
+        <FILE id="lVoC5h" name="UOY-Logo.png" compile="0" resource="1" file="Assets/Image/UOY-Logo.png"/>
       </GROUP>
     </GROUP>
     <GROUP id="{2A49D1C9-F5B8-3C89-B997-27A3ED5AF4A8}" name="Source">
