@@ -10,7 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-//#include "IRWaveform.h"
+#include "irWaveform.h"
 
 //==============================================================================
 /**
@@ -30,7 +30,6 @@ private:
     juce::Image background;
     juce::Image audiolab;
     juce::Image UOY;
-//    IRWaveform irWaveform;
     OpenAIRConvolverAudioProcessor& audioProcessor;
     
     //juce::TextButton loadIRButton;
