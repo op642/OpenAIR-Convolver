@@ -40,7 +40,6 @@ private:
     
     IRLoader irLoader;
     juce::dsp::Convolution::Convolution::NonUniform NUP;
-    std::vector<juce::AudioBuffer<float>> monoIRBuffers;
     
     
     

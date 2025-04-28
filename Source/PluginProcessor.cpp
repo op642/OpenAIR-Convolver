@@ -93,13 +93,6 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int sample
     {
         conv->prepare(spec);
     }
-
-    // Initialize monoIRBuffers for each channel
-    monoIRBuffers.resize(spec.numChannels);
-    for (auto& buffer : monoIRBuffers)
-    {
-        buffer.setSize(1, samplesPerBlock); // Mono buffer for each channel
-    }
 }
 
 // Release Resources
