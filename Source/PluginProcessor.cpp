@@ -60,6 +60,21 @@ void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
     }
 
     irLoader.loadBformatIRFile(irFile, getSampleRate(), getTotalNumOutputChannels());
+
+    // Extract the first channel of the decoded IR
+    if (irLoader.isBufferReady())
+    {
+        std::vector<juce::AudioBuffer<float>> buffers;
+        irLoader.processPendingBuffers(convolutions, getSampleRate());
+        if (!buffers.empty())
+        {
+            auto& firstChannelBuffer = buffers[0];
+            firstChannelIR.resize(firstChannelBuffer.getNumSamples());
+            std::copy(firstChannelBuffer.getReadPointer(0),
+                      firstChannelBuffer.getReadPointer(0) + firstChannelBuffer.getNumSamples(),
+                      firstChannelIR.begin());
+        }
+    }
 }
 
 
@@ -162,6 +177,10 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 // Getter for convolutions
 const std::vector<std::unique_ptr<juce::dsp::Convolution>>& OpenAIRConvolverAudioProcessor::getConvolutions() const {
     return convolutions;
+}
+const std::vector<float>& OpenAIRConvolverAudioProcessor::getFirstChannelIR() const
+{
+    return firstChannelIR;
 }
 
 // *****************************************************************************

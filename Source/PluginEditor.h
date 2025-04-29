@@ -24,6 +24,8 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    void loadTempIRFile(const juce::File& tempFile);
 
 private:
     juce::ComboBox irSelectionBox;
@@ -31,6 +33,7 @@ private:
     juce::Image audiolab;
     juce::Image UOY;
     OpenAIRConvolverAudioProcessor& audioProcessor;
+    std::vector<float> irData;
     
     //juce::TextButton loadIRButton;
     
