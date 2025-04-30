@@ -14,7 +14,9 @@
 const std::map<int, std::pair<const char*, size_t>> irFileMap = {
     {1, {BinaryData::York_Minster_bformat_48k_wav, BinaryData::York_Minster_bformat_48k_wavSize}},
     {2, {BinaryData::Usina_bformat_48_wav, BinaryData::Usina_bformat_48_wavSize}},
-    {3, {nullptr, 0}} // Placeholder for other cases
+    {3, {BinaryData::koli_summer_site1_1way_bformat_48k_wav, BinaryData::koli_summer_site1_1way_bformat_48k_wavSize}},
+    {4, {BinaryData::falkland_tennis_court_b_format_wav, BinaryData::falkland_tennis_court_b_format_wavSize}},
+    {5, {BinaryData::clifford_tower_S1R3_Bformat_wav, BinaryData::clifford_tower_S1R3_Bformat_wavSize}}// Placeholder for other cases
 };
 
 //==============================================================================
@@ -87,8 +89,43 @@ OpenAIRConvolverAudioProcessorEditor::OpenAIRConvolverAudioProcessorEditor(OpenA
     addAndMakeVisible(irSelectionBox);
 
     irSelectionBox.addItem("York Minster", 1);
-    irSelectionBox.addItem("Usina del arte", 2);
-    irSelectionBox.addItem("Another", 3);
+    irSelectionBox.addItem("Usina Symphony Hall", 2);
+    irSelectionBox.addItem("Koli Forest in Summer", 3);
+    irSelectionBox.addItem("Falkland Royal Tennis Court", 4);
+    irSelectionBox.addItem("Cliffords Tower", 5);
+    irSelectionBox.addItem("Air Museum", 6);
+    irSelectionBox.addItem("Alcuin Outside", 7);
+    irSelectionBox.addItem("Bottle Dungeon", 8);
+    irSelectionBox.addItem("York Uni Central Hall", 9);
+    irSelectionBox.addItem("Creswell Crags", 10);
+    irSelectionBox.addItem("Yorkshire Dales Canyon", 11);
+    irSelectionBox.addItem("Dixon Studio Theater", 12);
+    irSelectionBox.addItem("Gill Head Mine", 13);
+    irSelectionBox.addItem("Hendrix Hall", 14);
+    irSelectionBox.addItem("Heslington Church", 15);
+    irSelectionBox.addItem("Jack Lyons Concert Hall", 16);
+    irSelectionBox.addItem("Koli Forest in Winter", 17);
+    irSelectionBox.addItem("Lime Kiln", 18);
+    irSelectionBox.addItem("Maes Howe", 19);
+    irSelectionBox.addItem("Hamilton Mausoleum", 20);
+    irSelectionBox.addItem("New Grange", 21);
+    irSelectionBox.addItem("R1 Reactor Hall", 22);
+    irSelectionBox.addItem("Railway Tunnel", 23);
+    irSelectionBox.addItem("Ron Cooke Hub", 24);
+    irSelectionBox.addItem("Rymer Auditorium", 25);
+    irSelectionBox.addItem("Studio Live room", 26);
+    irSelectionBox.addItem("York Sports Centre Hall", 27);
+    irSelectionBox.addItem("Spring Lane Building", 28);
+    irSelectionBox.addItem("St Andrews Church", 29);
+    irSelectionBox.addItem("St Marys Abbey", 30);
+    irSelectionBox.addItem("St Patricks Church", 31);
+    irSelectionBox.addItem("St Patricks Church Model", 32);
+    irSelectionBox.addItem("Terrys Typing Room", 33);
+    irSelectionBox.addItem("Terrys Warehouse", 34);
+    irSelectionBox.addItem("Tyndall Bruce", 35);
+    irSelectionBox.addItem("Wheldrake Wood", 36);
+    irSelectionBox.addItem("York Guildhall", 37);
+    
     irSelectionBox.setTextWhenNothingSelected("Select An Impulse Response");
 
     irSelectionBox.onChange = [this] {
@@ -147,8 +184,8 @@ void OpenAIRConvolverAudioProcessorEditor::resized()
 {
     const auto btnX = getWidth() * 0.21;
     const auto btnY = getHeight() * 0.27;
-    const auto btnWidth = getWidth() * 0.59;
-    const auto btnHeight = getHeight() * 0.1;
+    const auto btnWidth = getWidth() * (0.59);
+    const auto btnHeight = getHeight() * (0.1);
 
     irSelectionBox.setBounds(btnX, btnY, btnWidth, btnHeight);
     
