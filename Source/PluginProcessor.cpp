@@ -24,7 +24,7 @@ OpenAIRConvolverAudioProcessor::OpenAIRConvolverAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::create5point1(), true)
                      #endif
                        ),
-    irLoader(6) // potentially change to match output channels 6ch = 5.1
+    irLoader(6) // 6 threads for 6 channels (5.1)
 {
     //Empty constructor
 }
@@ -49,7 +49,32 @@ bool OpenAIRConvolverAudioProcessor::isBusesLayoutSupported(const BusesLayout& l
 
 void OpenAIRConvolverAudioProcessor::loadIRFile(const juce::File& irFile)
 {
+    if (!irFile.existsAsFile())
+    {
+        juce::NativeMessageBox::showMessageBoxAsync(
+            juce::AlertWindow::WarningIcon,
+            "File Loading Error",
+            "The selected IR file could not be found or loaded. Please check the file and try again."
+        );
+        return;
+    }
+
     irLoader.loadBformatIRFile(irFile, getSampleRate(), getTotalNumOutputChannels());
+
+    // Extract the first channel of the decoded IR
+    if (irLoader.isBufferReady())
+    {
+        std::vector<juce::AudioBuffer<float>> buffers;
+        irLoader.processPendingBuffers(convolutions, getSampleRate());
+        if (!buffers.empty())
+        {
+            auto& firstChannelBuffer = buffers[0];
+            firstChannelIR.resize(firstChannelBuffer.getNumSamples());
+            std::copy(firstChannelBuffer.getReadPointer(0),
+                      firstChannelBuffer.getReadPointer(0) + firstChannelBuffer.getNumSamples(),
+                      firstChannelIR.begin());
+        }
+    }
 }
 
 
@@ -83,16 +108,6 @@ void OpenAIRConvolverAudioProcessor::prepareToPlay(double sampleRate, int sample
     {
         conv->prepare(spec);
     }
-
-    // Initialize monoIRBuffers for each channel
-    monoIRBuffers.resize(spec.numChannels);
-    for (auto& buffer : monoIRBuffers)
-    {
-        buffer.setSize(1, samplesPerBlock); // Mono buffer for each channel
-    }
-
-    // Initialize temporary buffers
-    decodedIRBuffer.setSize(spec.numChannels, samplesPerBlock);
 }
 
 // Release Resources
@@ -159,29 +174,13 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 }
 
 //==============================================================================
-// Getters and Setters
-
-// Getter and Setter for root
-juce::File OpenAIRConvolverAudioProcessor::getRoot() const {
-    return root;
-}
-
-void OpenAIRConvolverAudioProcessor::setRoot(const juce::File& newRoot) {
-    root = newRoot;
-}
-
-// Getter and Setter for savedIRFile
-juce::File OpenAIRConvolverAudioProcessor::getSavedIRFile() const {
-    return savedIRFile;
-}
-
-void OpenAIRConvolverAudioProcessor::setSavedIRFile(const juce::File& newSavedIRFile) {
-    savedIRFile = newSavedIRFile;
-}
-
 // Getter for convolutions
 const std::vector<std::unique_ptr<juce::dsp::Convolution>>& OpenAIRConvolverAudioProcessor::getConvolutions() const {
     return convolutions;
+}
+const std::vector<float>& OpenAIRConvolverAudioProcessor::getFirstChannelIR() const
+{
+    return firstChannelIR;
 }
 
 // *****************************************************************************

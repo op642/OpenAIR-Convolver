@@ -12,7 +12,7 @@
         <BUS index="0" layout="disabled"/>
       </INPUTS>
       <OUTPUTS>
-        <BUS index="0" layout="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18"/>
+        <BUS index="0" layout="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20"/>
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
@@ -34,7 +34,7 @@
   <FILTER uid="3" x="0.5" y="0.9" useARA="0">
     <PLUGIN name="Audio Output" descriptiveName="" format="Internal" category="I/O devices"
             manufacturer="JUCE" version="1.0" file="" uniqueId="724248cb"
-            isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="18"
+            isInstrument="0" fileTime="0" infoUpdateTime="0" numInputs="20"
             numOutputs="0" isShell="0" hasARAExtension="0" uid="724248cb"/>
     <STATE>0.</STATE>
     <LAYOUT>
@@ -62,13 +62,13 @@
     </LAYOUT>
   </FILTER>
   <FILTER uid="6" x="0.1475" y="0.2557692307692307" useARA="0" uiLastX_Normal="179"
-          uiLastY_Normal="350" uiopen_Normal="0">
+          uiLastY_Normal="350" uiopen_Normal="1">
     <PLUGIN name="AUAudioFilePlayer" format="AudioUnit" category="Generator"
             manufacturer="Apple" version="1.6.0" file="AudioUnit:Generators/augn,afpl,appl"
-            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="195fe20ab4f"
+            uniqueId="6163676e" isInstrument="0" fileTime="0" infoUpdateTime="196628701c4"
             numInputs="0" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="6163676e"/>
-    <STATE>951.hAGaoMGcv.C1AHv.DTfAGfPBJr.IkXxIpvUag4VclE1XzUmbkIGUjEFcg8EDarVPUAkbkMWYzAUYxMWZyQWYtQ2TzEFcksTY4c0b0IFc4AWYWYWYxMWZu4FUzkGbk8EDOXVZrUVKxUlYkIWYtMVYyQkag0VYRDFbvwFPhxfFR2fCO.AVFkFak4TXsU1URU1Yo8lay8EDL9RUyUlby8xarkFbgIGcxkFYmU1KLklXxElb48xPr8VcjMEcuIWXmU1KO4VYDIWZ1UVKPUlby8lagw1KEwVYiQmboMVXrARQtcVZtUVYxklam8RVkElbfPyKFklagwFHPI2apU1Xz8hQP8USgQGagI1KAUGYo81KjIWdeEVcjk1auLWZtcVZtclK2ElcgFA0RLAEUXwEXjgWRU1Yo8laD8VYywzauAmVRU1Yo8laDEFcg8EDPjzbSUFakMFckQlTkcVZu4lVRU1Yo8laNEVakgvSP.G..........fYzu+68+A....DlED........v+......bUj...fA..f6lJ...X.....gYAA....D....P..........................................................DYjC.......InkSkcGHRU1Yo8laS2fCavQGX3URyMUYrU1XzUFYFkFak8EDN9RUyUlby8xarkFbgIGcxkFYmU1KLklXxElb48xPr8VcjMEcuIWXmU1KO4VYDIWZ1UVKPUlby8lagw1KEwVYiQmboMVXrARQtcVZtUVYxklam8RVkElbfPyKFklagwFHPI2apU1Xz8hQP8USgQGagI1KAUGYo81KjIWdeEVcjk1auLGbkU1Xn8EM33xcgYWndPsDSPQEV.BFhfvSP.G..........fYzu+68+A...3sfED........v+......VGr...fA..f1iJ...X....dKXAA....D....P...........................................................3fU.......InkSkcGHRU1Yo8laIHQXlAGaP.fDgU2YtIMJo7.GVYTZrUFHwXkQowVYfHCVU4FcoQGakQF.H.PF.XB.q.PR.DE.YAfW..G.0Afd.rG.9Avf.vH.TFvHATR.tDPOAfT.aEfYAbV.ZGv1AXd.sG.+Bzn.OJ.lBj4.LLPCCfw.YLfGC.x.kLfJCDy.3........HP..........rB..................LPP</STATE>
+    <STATE>1188.hAGaoMGcv.C1AHv.DTfAGfPBJr.Ks3xKyvUag4VclE1XzUmbkIGUjEFcg8EDarVPUAkbkMWYzAUYxMWZyQWYtQ2TzEFcksTY4c0b0IFc4AWYWYWYxMWZu4FUzkGbk8EDOXVZrUVKxUlYkIWYtMVYyQkag0VYRDFbvwFPix.GjLcCN7.DQjAVFkFak4TXsU1URU1Yo8lay4URyMUYrU1XzUFYFkFak8EDL9RUyUlby8xarkFbgIGcxkFYmU1KLklXxElb48xPr8VcjMEcuIWXmU1KO4VYDIWZ1UVKPUlby8lagw1KEwVYiQmboMVXrARQtcVZtUVYxklam8RVkElbfPyKFklagwFHPI2apU1Xz8hQP8USgQGagI1KAUGYo81KjIWdeEVcjk1auLWZtcVZtclK2ElcgJA0SPQEVbAFYngWRU1Yo8laD8VYywzauAmVRU1Yo8laDEFcg8EDPjzbSUFakMFckQlTkcVZu4lVRU1Yo8laNEVakgvSP.G..........fYzu+68+A....DlED........v+......bUj...fA..f6lJ...X.....gYAA....D....P..........................................................DYjC.......InkSkcGHRU1Yo8laIHcCNzgGeAgiuT0bkI2bu7FaoAWXxQmboQ1Yk8BSoIlbgIWduLDauUGYSQ2axE1Yk8xStUFQxklck0BTkI2bu4VXr8RQrU1XzIWZiEFafTjamklakUlbo41YujUYgIGHz7hQo4VXrABTx8lZkMFcuXDTe0TXzwVXh8RP0QVZu8BYxk2WgUGYo81KyAWYkMFZeQCNtbWX1E5GTOAEUXwEgjwHH7DDvA..........XF86+d+e....dKXAA........7O.....f0AK...X...n8nB...F...f2BVP.....A....D...........................................................NXE......PBZ4TY2AhTkcVZu4lzM3PIl7ED97RUyUlby8xarkFbgIGcxkFYmU1KPI2amIWXs0VZtc1KDEzUuLzatYGHzU1bz8xbo41Yo41Ysz1at8lK2ElcgdB0SPQEVbQJYrBBOAAb...........lQ+9u2+G....o33R.........+C.....39OB...F...zqp...fA...PJNtD....P.....A..........................................................foN.......jfVNU1cfHUYmk1atIQXlAGaP.fDgU2YtMMLwHCDkzgUFkFakARLVYTZrUFHyXkQowVYfHCVU4FcoQGakQF.H.PF.XB.q.PR.DE.YAfW..G.0Afd.rG.+Afg.7H.WBfoATS.2D.PA7T.ZEPaAfW.4E.6Azd.3GP9A3u.OJPjBno.aNfCC7v.ZLvGC.1.hMvZCv1.eO.3Cr9.vOf7Cb+.9SPADv.AS........HP..........PC..................P.G</STATE>
     <LAYOUT>
       <INPUTS/>
       <OUTPUTS>
@@ -80,7 +80,7 @@
           uiLastY_Normal="5" uiopen_Normal="0">
     <PLUGIN name="OpenAIR Convolver" format="VST3" category="Fx" manufacturer="York AudioLab"
             version="1.0.0" file="/Users/olipartridge/Programming/OpenAIR-Convolver/Builds/MacOSX/build/Debug/OpenAIR_Convolver.vst3"
-            uniqueId="6a7e327" isInstrument="0" fileTime="195fdf83c93" infoUpdateTime="195fe20ab50"
+            uniqueId="6a7e327" isInstrument="0" fileTime="1965fd8b70a" infoUpdateTime="196628701c4"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="acfe53cc"/>
     <STATE>191.VMjLgXK....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjYt3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9..</STATE>
@@ -107,33 +107,40 @@
     </LAYOUT>
   </FILTER>
   <FILTER uid="10" x="0.33625" y="0.525" useARA="0" uiLastX_Normal="94"
-          uiLastY_Normal="458" uiopen_Normal="0">
+          uiLastY_Normal="458" uiopen_Normal="1" uiLastX_IO="159" uiLastY_IO="464"
+          uiopen_IO="0">
     <PLUGIN name="OpenAIR Convolver" format="AudioUnit" category="Effect"
             manufacturer="York AudioLab" version="1.0.0" file="AudioUnit:Effects/aufx,Ysqr,Manu"
-            uniqueId="7567797f" isInstrument="0" fileTime="0" infoUpdateTime="195fe20ab50"
-            numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
+            uniqueId="7567797f" isInstrument="0" fileTime="0" infoUpdateTime="196628701c4"
+            numInputs="6" numOutputs="6" isShell="0" hasARAExtension="0"
             uid="7567797f"/>
     <STATE>191.hAGaoMGcv.y0AHv.DTfAGfPBJHwDTTAWsEla0YVXiQWcxUlbTQVXzEFWkwVYsUlaz0hag0VYWMWchQWdvU1U1Ulbyk1atQEc4AWYT4VXsUlDMEla0AjzKvPCPDULQISzN7PTvTURtAWczEsCQX0S0QGb0QmDYMWbxAA.RDVclgGVU4FcoQGakQFBWPRJ13iQKAUUVsUWeIFYp0Fc4sGf........AD..........V....................jH</STATE>
     <LAYOUT>
       <INPUTS>
-        <BUS index="0" layout="L R"/>
+        <BUS index="0" layout="L R C Lfe Ls Rs"/>
       </INPUTS>
       <OUTPUTS>
-        <BUS index="0" layout="L R"/>
+        <BUS index="0" layout="L R C Lfe Ls Rs"/>
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
   <CONNECTION srcFilter="2" srcChannel="4096" dstFilter="9" dstChannel="4096"/>
-  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="8" dstChannel="0"/>
-  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="8" dstChannel="1"/>
   <CONNECTION srcFilter="6" srcChannel="0" dstFilter="10" dstChannel="0"/>
-  <CONNECTION srcFilter="6" srcChannel="1" dstFilter="10" dstChannel="1"/>
-  <CONNECTION srcFilter="8" srcChannel="0" dstFilter="3" dstChannel="0"/>
-  <CONNECTION srcFilter="8" srcChannel="1" dstFilter="3" dstChannel="1"/>
-  <CONNECTION srcFilter="9" srcChannel="0" dstFilter="8" dstChannel="0"/>
-  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="8" dstChannel="1"/>
-  <CONNECTION srcFilter="9" srcChannel="0" dstFilter="10" dstChannel="0"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="10" dstChannel="1"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="10" dstChannel="2"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="10" dstChannel="3"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="10" dstChannel="4"/>
+  <CONNECTION srcFilter="6" srcChannel="0" dstFilter="10" dstChannel="5"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="10" dstChannel="0"/>
   <CONNECTION srcFilter="9" srcChannel="1" dstFilter="10" dstChannel="1"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="10" dstChannel="2"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="10" dstChannel="3"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="10" dstChannel="4"/>
+  <CONNECTION srcFilter="9" srcChannel="1" dstFilter="10" dstChannel="5"/>
   <CONNECTION srcFilter="10" srcChannel="0" dstFilter="3" dstChannel="0"/>
   <CONNECTION srcFilter="10" srcChannel="1" dstFilter="3" dstChannel="1"/>
+  <CONNECTION srcFilter="10" srcChannel="2" dstFilter="3" dstChannel="2"/>
+  <CONNECTION srcFilter="10" srcChannel="3" dstFilter="3" dstChannel="3"/>
+  <CONNECTION srcFilter="10" srcChannel="4" dstFilter="3" dstChannel="4"/>
+  <CONNECTION srcFilter="10" srcChannel="5" dstFilter="3" dstChannel="5"/>
 </FILTERGRAPH>

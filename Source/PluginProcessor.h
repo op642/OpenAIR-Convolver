@@ -34,16 +34,15 @@ public:
     
     void loadIRFile(const juce::File& irFile);
     
+    const std::vector<float>& getFirstChannelIR() const;
+    
 private:
     juce::dsp::ProcessSpec spec;
-    juce::File root, savedIRFile;
     std::vector<std::unique_ptr<juce::dsp::Convolution>> convolutions;
     
     IRLoader irLoader;
     juce::dsp::Convolution::Convolution::NonUniform NUP;
-    
-    juce::AudioBuffer<float> decodedIRBuffer;
-    std::vector<juce::AudioBuffer<float>> monoIRBuffers;
+    std::vector<float> firstChannelIR;
     
     
     
