@@ -21,3 +21,7 @@ AudioPluginHost can be used to easily test the Plugin from your IDE, alternative
 
 ![Screenshot 2025-05-01 at 14 27 47](https://github.com/user-attachments/assets/26333ada-e4fd-450a-8581-5ad8458392ec)
 
+### For installation put the vst3 or AU (component) in the appropriate place shown in the table below.
+![Screenshot 2025-05-02 at 00 36 25](https://github.com/user-attachments/assets/239fd635-2c5d-492d-8fb9-fcdeee999d07)
+
+this table can be found here: https://juce.com/tutorials/tutorial_app_plugin_packaging/
