@@ -11,7 +11,7 @@ OpenAIR can be accessed here:
 http://openair.hosted.york.ac.uk
 
 ## Requirements
-The Plugin will only work at 48kHz Sample Rate.
+The Plugin will only work at 48kHz Sample Rate. Make sure to configure your DAW ouput as 5.1 surround sound (6 channels).
 
 JUCE v8.0.6 was used during development.
 
