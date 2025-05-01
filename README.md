@@ -15,7 +15,9 @@ The Plugin will only work at 48kHz Sample Rate.
 
 JUCE v8.0.6 was used during development.
 
-Ppening project through Projucer is recommended.
+Opening project through Projucer is recommended.
+
+AudioPluginHost can be used to easily test the Plugin from your IDE, alternatively build and open in Reaper.
 
 ![Screenshot 2025-05-01 at 14 27 47](https://github.com/user-attachments/assets/26333ada-e4fd-450a-8581-5ad8458392ec)
 
