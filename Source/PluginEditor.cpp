@@ -11,12 +11,51 @@
 #include <map>
 
 // IR File Selection Options
+
 const std::map<int, std::pair<const char*, size_t>> irFileMap = {
     {1, {BinaryData::York_Minster_bformat_48k_wav, BinaryData::York_Minster_bformat_48k_wavSize}},
     {2, {BinaryData::Usina_bformat_48_wav, BinaryData::Usina_bformat_48_wavSize}},
     {3, {BinaryData::koli_summer_site1_1way_bformat_48k_wav, BinaryData::koli_summer_site1_1way_bformat_48k_wavSize}},
     {4, {BinaryData::falkland_tennis_court_b_format_wav, BinaryData::falkland_tennis_court_b_format_wavSize}},
-    {5, {BinaryData::clifford_tower_S1R3_Bformat_wav, BinaryData::clifford_tower_S1R3_Bformat_wavSize}}// Placeholder for other cases
+    {5, {BinaryData::clifford_tower_S1R3_Bformat_wav, BinaryData::clifford_tower_S1R3_Bformat_wavSize}},
+    
+    {6, {BinaryData::Air_museum_bformat_S1R1_1_wav, BinaryData::Air_museum_bformat_S1R1_1_wavSize}},
+    {7, {BinaryData::alcuin_s1r1front_bformat_wav, BinaryData::alcuin_s1r1front_bformat_wavSize}},
+    {8, {BinaryData::bottledungeon1_sf_edited_wav, BinaryData::bottledungeon1_sf_edited_wavSize}},
+    {9, {BinaryData::Central_Hall_ir_row_3c_centre_front_bformat_wav, BinaryData::Central_Hall_ir_row_3c_centre_front_bformat_wavSize}},
+    {10, {BinaryData::Creswell_crags_1_r_rhcbottom_s_rhc_bottom_wav, BinaryData::Creswell_crags_1_r_rhcbottom_s_rhc_bottom_wavSize}},
+    
+    {11, {BinaryData::dales_Canyon_site2_4way_bformat_wav, BinaryData::dales_Canyon_site2_4way_bformat_wavSize}},
+    {12, {BinaryData::Dixon_studioTheatre_r1_rir_bformat_wav, BinaryData::Dixon_studioTheatre_r1_rir_bformat_wavSize}},
+    {13, {BinaryData::gill_head_mine_site1_1way_bformat_wav, BinaryData::gill_head_mine_site1_1way_bformat_wavSize}},
+    {14, {BinaryData::Hendrix_Hall_EigenmikeHHB1_processed_Bformat_wav, BinaryData::Hendrix_Hall_EigenmikeHHB1_processed_Bformat_wavSize}},
+    {15, {BinaryData::heslington_church002_bformat_wav, BinaryData::heslington_church002_bformat_wavSize}},
+    {16, {BinaryData::jack_lyons_lp1_96k_wav, BinaryData::jack_lyons_lp1_96k_wavSize}},
+    {17, {BinaryData::koli_snow_site1_1way_bformat_wav, BinaryData::koli_snow_site1_1way_bformat_wavSize}},
+    {18, {BinaryData::lime_kiln_p1_bformat_wav, BinaryData::lime_kiln_p1_bformat_wavSize}},
+    {19, {BinaryData::maes_howe_000_bformat_48k_wav, BinaryData::maes_howe_000_bformat_48k_wavSize}},
+    {20, {BinaryData::Mausoleum_2_000_bformat_48k_wav, BinaryData::Mausoleum_2_000_bformat_48k_wavSize}},
+    
+    {21, {BinaryData::newgrange_s1r1_wav, BinaryData::newgrange_s1r1_wavSize}},
+    {22, {BinaryData::r1_bformat48k_wav, BinaryData::r1_bformat48k_wavSize}},
+    {23, {BinaryData::railway_tunnel_4way_bformat_wav, BinaryData::railway_tunnel_4way_bformat_wavSize}},
+    {24, {BinaryData::RonCooke_hub_fsfrbformat_wav, BinaryData::RonCooke_hub_fsfrbformat_wavSize}},
+    {25, {BinaryData::Rymer_s1r2_bformat_wav, BinaryData::Rymer_s1r2_bformat_wavSize}},
+    
+    {26, {BinaryData::S1R1_LiveRoom_IR_1_wav, BinaryData::S1R1_LiveRoom_IR_1_wavSize}},
+    {27, {BinaryData::sportscentre_hall_bformat_wav, BinaryData::sportscentre_hall_bformat_wavSize}},
+    {28, {BinaryData::Spring_lane_sp1_mp1_ir_bformat_trimmed_wav, BinaryData::Spring_lane_sp1_mp1_ir_bformat_trimmed_wavSize}},
+    {29, {BinaryData::St_Andrews_church_000_bformat_48k_wav, BinaryData::St_Andrews_church_000_bformat_48k_wavSize}},
+    {30, {BinaryData::st_marys_abbey_phase3_bformat_wav, BinaryData::st_marys_abbey_phase3_bformat_wavSize}},
+    
+    {31, {BinaryData::st_Patricks_church_s1r1_wav, BinaryData::st_Patricks_church_s1r1_wavSize}},
+    {32, {BinaryData::stpatricks_model_s1r1_wav, BinaryData::stpatricks_model_s1r1_wavSize}},
+    {33, {BinaryData::terrys_typing_b_format_wav, BinaryData::terrys_warehouse_b_format_wavSize}},
+    {34, {BinaryData::terrys_warehouse_b_format_wav, BinaryData::terrys_warehouse_b_format_wavSize}},
+    {35, {BinaryData::tyndall_bruce_b_format_wav, BinaryData::tyndall_bruce_b_format_wavSize}},
+    
+    {36, {BinaryData::wheldrake_wood_S1R1_SF_wav, BinaryData::wheldrake_wood_S1R1_SF_wavSize}},
+    {37, {BinaryData::York_guildhall_councilchamber_s1_r1_ir_1_96000_wav, BinaryData::York_guildhall_councilchamber_s1_r1_ir_1_96000_wavSize}}
 };
 
 //==============================================================================
