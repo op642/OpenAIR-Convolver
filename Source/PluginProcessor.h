@@ -41,7 +41,8 @@ private:
     std::vector<std::unique_ptr<juce::dsp::Convolution>> convolutions;
     
     IRLoader irLoader;
-    juce::dsp::Convolution::Convolution::NonUniform NUP;
+    juce::dsp::Convolution::Convolution::NonUniform NUP; //this just works better?
+//    juce::dsp::Convolution::NonUniform NUP;
     std::vector<float> firstChannelIR;
     
     

@@ -158,11 +158,11 @@ void IRLoader::decodeBFormatTo5Point1(const juce::AudioBuffer<float>& bFormatBuf
     for (int i = 0; i < numSamples; ++i)
     {
         // Bruce Wiggins pHD bformat Decoder
-        L[i] = 0.3623f * W[i] + 0.3208f*Y[i] + 0.4340f*X[i]; //0.707f * (W[i] + X[i]);
+        L[i] = 0.3623f * W[i] + 0.3208f*Y[i] + 0.4340f*X[i];
         R[i] = 0.3623f * W[i] - 0.3208f*Y[i] + 0.4340f*X[i];
         C[i] = 0*W[i];
         LFE[i] = 0*Z[i];
-        Ls[i] = 0.5548f*W[i] + 0.3359f*Y[i] - 0.2415f*X[i]; //* (W[i] + Y[i]);
+        Ls[i] = 0.5548f*W[i] + 0.3359f*Y[i] - 0.2415f*X[i];
         Rs[i] = 0.5548f*W[i] - 0.3359f*Y[i] - 0.2415f*X[i];
 
 //        if (i < 10) // Log the first 10 samples
